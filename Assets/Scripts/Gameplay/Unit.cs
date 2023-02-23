@@ -22,10 +22,9 @@ public class Unit : GameworldObject
 
     public int CrystalUnitCost = 50;
     public float ProductionTimeSeconds = 1f;
-    public float MovementPerSecond = 8f;
+    public ConfiguredStatistic<float> MovementPerSecond = new ConfiguredStatistic<float>(8f, $"{nameof(Unit)}.{nameof(MovementPerSecond)}");
 
     public float TimeToReturnResource = 1f;
-
     public Vector3 DestinationPoint { get; set; }
 
     [SerializeReference]
@@ -47,6 +46,9 @@ public class Unit : GameworldObject
 
     private void Awake()
     {
+        MovementPerSecond.LoadFromConfiguration(ConfigurationManagement.ActiveConfiguration);
+
+        curState = UnitCommandState.GatherClosestResource;
         CurrentTargetCrystals = GoToNeareset<Crystals>();
     }
 
@@ -119,7 +121,7 @@ public class Unit : GameworldObject
             return;
         }
 
-        float movementAllowed = Time.deltaTime * MovementPerSecond;
+        float movementAllowed = Time.deltaTime * MovementPerSecond.Value;
         while (movementAllowed > 0)
         {
             if (CurrentPath == null)
@@ -199,20 +201,20 @@ public class Unit : GameworldObject
 
         if (curState == UnitCommandState.ReturnResourceToCenter)
         {
-            // Need to find a next crystal
             curState = UnitCommandState.ReturningNow;
             StartCoroutine(StartSeekingNextResourceAfterReturningDelay(TimeToReturnResource));
             return;
         }
 
         if (curState == UnitCommandState.GatherClosestResource &&
-            CurrentTargetCrystals != null && Vector3.Distance(transform.position, CurrentTargetCrystals.transform.position) < CloseEnoughToResource)
+            CurrentTargetCrystals != null && Vector3.Distance(transform.position, CurrentTargetCrystals.transform.position) <= CloseEnoughToResource)
         {
+            curState = UnitCommandState.GatheringNow;
             StartCoroutine(StartReturningToBaseAfterDelay(CurrentTargetCrystals.TimeToGatherResource));
             return;
         }
 
-        Debug.Log("Reached destination. Now what?");
+        Debug.LogWarning($"Reached destination. Now what? {nameof(curState)}: {curState} ; {nameof(CurrentPath)} == null? {CurrentPath == null}");
     }
 
     public void SendTowardsPosition(Vector3 position)

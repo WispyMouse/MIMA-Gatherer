@@ -1,0 +1,7 @@
+{
+	"Configuration": 
+		{
+			"testValue": "testResult",
+			"Unit.MovementPerSecond": "1000"
+		}
+}
