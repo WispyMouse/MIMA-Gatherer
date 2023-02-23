@@ -1,7 +1,16 @@
 {
 	"Configuration": 
 		{
-			"testValue": "testResult",
-			"Unit.MovementPerSecond": "1000"
+			"Unit.CrystalUnitCost": "50",
+			"Unit.MovementPerSecond": "1000",
+			"Unit.ProductionTimeSeconds": "1",
+			"Unit.TimeToReturnResource": "1",
+			
+			"InventoryManagement.InitialCrystalCount": "50",
+			
+			"Crystals.TimeToGatherResource": "1",
+			"Crystals.AmountOfResourcesGathered": "15",
+			
+			"Structure.DistanceToSpawnUnit": "1"
 		}
 }

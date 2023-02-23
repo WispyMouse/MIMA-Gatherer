@@ -5,8 +5,21 @@ using UnityEngine;
 [System.Serializable]
 public class ConfiguredStatistic<T>
 {
-    public T Value;
+    public T Value
+    {
+        get
+        {
+            if (ValueLoaded == false)
+            {
+                LoadFromConfiguration(ConfigurationManagement.ActiveConfiguration);
+            }
+
+            return _value;
+        }
+    }
+    private T _value { get; set; }
     public string ConfigurationPath;
+    public bool ValueLoaded { get; set; } = false;
 
     public ConfiguredStatistic()
     {
@@ -15,7 +28,7 @@ public class ConfiguredStatistic<T>
 
     public ConfiguredStatistic(T valueOfConfiguration, string configurationPath)
     {
-        this.Value = valueOfConfiguration;
+        this._value = valueOfConfiguration;
         this.ConfigurationPath = configurationPath;
     }
 
@@ -24,15 +37,16 @@ public class ConfiguredStatistic<T>
         string foundValue;
         if (configuration.Configuration.TryGetValue(ConfigurationPath, out foundValue))
         {
-            T deserializedValue = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(foundValue);
+            _value = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(foundValue);
 
-            if (deserializedValue != null)
+            if (_value != null)
             {
-                Value = deserializedValue;
+                ValueLoaded = true;
+                return;
             }
             else
             {
-                Debug.LogError($"Configuration at path {ConfigurationPath} found a value, but it could not be deserialized into {nameof(T)}");
+                Debug.LogError($"Found configuration at path {ConfigurationPath} but it could not be boxed in to type {typeof(T).Name}");
             }
         }
         else

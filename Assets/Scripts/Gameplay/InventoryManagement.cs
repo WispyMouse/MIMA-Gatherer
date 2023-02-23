@@ -18,16 +18,19 @@ public class InventoryManagement : MonoBehaviour
     [SerializeReference]
     private ResourceChangeEvent ResourceChangeEvent;
 
+    public ConfiguredStatistic<int> InitialCrystalCount { get; set; } = new ConfiguredStatistic<int>(50, $"{nameof(InventoryManagement)}.{nameof(InitialCrystalCount)}");
+
     private void Awake()
     {
         Instance = this;
 
         ActiveInventoryInstance = new Inventory();
+        InitialCrystalCount.LoadFromConfiguration(ConfigurationManagement.ActiveConfiguration);
     }
 
     private void Start()
     {
-        ChangeResource(nameof(Crystals), 50);
+        ChangeResource(nameof(Crystals), InitialCrystalCount.Value);
     }
 
     public static void ChangeResource(string resourceName, int delta)

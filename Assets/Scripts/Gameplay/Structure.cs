@@ -8,18 +8,23 @@ public class Structure : GameworldObject
     private Unit UnitPrefab;
 
     [SerializeField]
-    private float DistanceToSpawnUnit = 1f;
+    private ConfiguredStatistic<float> DistanceToSpawnUnit { get; set; } = new ConfiguredStatistic<float>(1f, $"{nameof(Structure)}.{nameof(DistanceToSpawnUnit)}");
+
+    private void Awake()
+    {
+        DistanceToSpawnUnit.LoadFromConfiguration(ConfigurationManagement.ActiveConfiguration);
+    }
 
     public override void Interact()
     {
         int amountOfCrystals = InventoryManagement.ActiveInventoryInstance.GetGatherableCount(nameof(Crystals)).Count;
-        if (amountOfCrystals < UnitPrefab.CrystalUnitCost)
+        if (amountOfCrystals < UnitPrefab.CrystalUnitCost.Value)
         {
             Debug.Log($"Insufficient crystals. Requires {UnitPrefab.CrystalUnitCost} crystals.");
             return;
         }
 
-        InventoryManagement.ChangeResource(nameof(Crystals), -UnitPrefab.CrystalUnitCost);
+        InventoryManagement.ChangeResource(nameof(Crystals), -UnitPrefab.CrystalUnitCost.Value);
 
         StartCoroutine(SpawnUnitAfterWaiting(UnitPrefab));
 
@@ -28,11 +33,11 @@ public class Structure : GameworldObject
 
     IEnumerator SpawnUnitAfterWaiting(Unit toSpawn)
     {
-        yield return new WaitForSeconds(toSpawn.ProductionTimeSeconds);
+        yield return new WaitForSeconds(toSpawn.ProductionTimeSeconds.Value);
 
         Unit newUnit = Instantiate(UnitPrefab);
 
-        Vector2 randomOffset = Random.insideUnitCircle.normalized * DistanceToSpawnUnit;
+        Vector2 randomOffset = Random.insideUnitCircle.normalized * DistanceToSpawnUnit.Value;
         newUnit.transform.position = transform.position + new Vector3(randomOffset.x, 0, randomOffset.y);
 
         yield break;

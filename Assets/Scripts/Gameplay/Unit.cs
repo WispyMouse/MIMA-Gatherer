@@ -12,7 +12,8 @@ public class Unit : GameworldObject
         FollowPath,
         None,
         GatheringNow,
-        ReturningNow
+        ReturningNow,
+        GatherRememberedResource
     }
 
     UnitCommandState curState { get; set; } = UnitCommandState.GatherClosestResource;
@@ -20,11 +21,27 @@ public class Unit : GameworldObject
     public const float CloseEnoughToCorner = .01f;
     public const float CloseEnoughToResource = .15f;
 
-    public int CrystalUnitCost = 50;
-    public float ProductionTimeSeconds = 1f;
-    public ConfiguredStatistic<float> MovementPerSecond = new ConfiguredStatistic<float>(8f, $"{nameof(Unit)}.{nameof(MovementPerSecond)}");
+    /// <summary>
+    /// How many crystals does this unit cost?
+    /// TODO: This should be a collection of costs, not one static cost. This will change very soon.
+    /// </summary>
+    public ConfiguredStatistic<int> CrystalUnitCost { get; set; } = new ConfiguredStatistic<int>(1, $"{nameof(Unit)}.{nameof(CrystalUnitCost)}");
 
-    public float TimeToReturnResource = 1f;
+    /// <summary>
+    /// How much in world space is traversed in one second. The default unit's model is one 'space' across.
+    /// </summary>
+    public ConfiguredStatistic<float> ProductionTimeSeconds { get; set; } = new ConfiguredStatistic<float>(1f, $"{nameof(Unit)}.{nameof(ProductionTimeSeconds)}");
+
+    /// <summary>
+    /// How much in world space is traversed in one second. The default unit's model is one 'space' across.
+    /// </summary>
+    public ConfiguredStatistic<float> MovementPerSecond { get; set; } = new ConfiguredStatistic<float>(8f, $"{nameof(Unit)}.{nameof(MovementPerSecond)}");
+
+    /// <summary>
+    /// How many seconds does it take for this unit to return a resource to a structure?
+    /// </summary>
+    public ConfiguredStatistic<int> TimeToReturnResource { get; set; } = new ConfiguredStatistic<int>(1, $"{nameof(Unit)}.{nameof(TimeToReturnResource)}");
+
     public Vector3 DestinationPoint { get; set; }
 
     [SerializeReference]
@@ -44,9 +61,14 @@ public class Unit : GameworldObject
     string HeldResource { get; set; }
     int HeldResourceCount { get; set; }
 
+    Coroutine DelayedOperation { get; set; }
+
     private void Awake()
     {
+        CrystalUnitCost.LoadFromConfiguration(ConfigurationManagement.ActiveConfiguration);
+        ProductionTimeSeconds.LoadFromConfiguration(ConfigurationManagement.ActiveConfiguration);
         MovementPerSecond.LoadFromConfiguration(ConfigurationManagement.ActiveConfiguration);
+        TimeToReturnResource.LoadFromConfiguration(ConfigurationManagement.ActiveConfiguration);
 
         curState = UnitCommandState.GatherClosestResource;
         CurrentTargetCrystals = GoToNeareset<Crystals>();
@@ -111,7 +133,22 @@ public class Unit : GameworldObject
 
         CurrentPathCornerIndex = 0;
         CurrentPath = pathToNearestThing;
+        DestinationPoint = nearestThing.transform.position;
         return nearestThing;
+    }
+
+    void GoToThing(GameworldObject thing)
+    {
+        NavMeshPath pathToNearestThing = new NavMeshPath();
+        if (!Agent.CalculatePath(thing.transform.position, pathToNearestThing))
+        {
+            Debug.Log("Can't find it, boss!");
+            return;
+        }
+
+        CurrentPathCornerIndex = 0;
+        CurrentPath = pathToNearestThing;
+        DestinationPoint = thing.transform.position;
     }
 
     private void FixedUpdate()
@@ -202,7 +239,7 @@ public class Unit : GameworldObject
         if (curState == UnitCommandState.ReturnResourceToCenter)
         {
             curState = UnitCommandState.ReturningNow;
-            StartCoroutine(StartSeekingNextResourceAfterReturningDelay(TimeToReturnResource));
+            DelayedOperation = StartCoroutine(StartSeekingNextResourceAfterReturningDelay(TimeToReturnResource.Value));
             return;
         }
 
@@ -210,7 +247,15 @@ public class Unit : GameworldObject
             CurrentTargetCrystals != null && Vector3.Distance(transform.position, CurrentTargetCrystals.transform.position) <= CloseEnoughToResource)
         {
             curState = UnitCommandState.GatheringNow;
-            StartCoroutine(StartReturningToBaseAfterDelay(CurrentTargetCrystals.TimeToGatherResource));
+            DelayedOperation = StartCoroutine(StartReturningToBaseAfterDelay(CurrentTargetCrystals.TimeToGatherResource.Value));
+            return;
+        }
+
+        if (curState == UnitCommandState.GatherRememberedResource &&
+            CurrentTargetCrystals != null && Vector3.Distance(transform.position, CurrentTargetCrystals.transform.position) <= CloseEnoughToResource)
+        {
+            curState = UnitCommandState.GatheringNow;
+            DelayedOperation = StartCoroutine(StartReturningToBaseAfterDelay(CurrentTargetCrystals.TimeToGatherResource.Value));
             return;
         }
 
@@ -259,9 +304,8 @@ public class Unit : GameworldObject
 
         IsHoldingResource = true;
         HeldResource = CurrentTargetCrystals.ResourceName;
-        HeldResourceCount = CurrentTargetCrystals.AmountOfResourcesGathered;
+        HeldResourceCount = CurrentTargetCrystals.AmountOfResourcesGathered.Value;
 
-        CurrentTargetCrystals = null;
         curState = UnitCommandState.ReturnResourceToCenter;
         GoToNeareset<Structure>();
     }
@@ -278,7 +322,15 @@ public class Unit : GameworldObject
         HeldResource = string.Empty;
         HeldResourceCount = 0;
 
-        curState = UnitCommandState.GatherClosestResource;
-        GoToNeareset<Crystals>();
+        if (CurrentTargetCrystals != null)
+        {
+            curState = UnitCommandState.GatherRememberedResource;
+            GoToThing(CurrentTargetCrystals);
+        }
+        else
+        {
+            curState = UnitCommandState.GatherClosestResource;
+            GoToNeareset<Crystals>();
+        }
     }
 }
