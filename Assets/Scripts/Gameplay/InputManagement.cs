@@ -14,11 +14,27 @@ public class InputManagement : MonoBehaviour
     [SerializeField]
     private LayerMask GameworldObjectLayerMask;
 
+    [SerializeField]
+    private LayerMask GroundLayerMask;
+
+    [SerializeField]
+    private UnitEvent UnitSelectedEvent;
+
+    private Unit SelectedUnit { get; set; }
+
     public void Update()
+    {
+        HandleLeftClick();
+        HandleRightClick();
+    }
+
+    void HandleLeftClick()
     {
         // If we're clicking on a GameworlObject, interact with it
         if (Input.GetMouseButtonDown(0))
         {
+            SelectedUnit = null;
+
             Ray clickRaycast = MainGameplayCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit[] hits = Physics.RaycastAll(clickRaycast.origin, clickRaycast.direction, float.MaxValue, GameworldObjectLayerMask.value);
             foreach (RaycastHit hit in hits)
@@ -28,7 +44,33 @@ public class InputManagement : MonoBehaviour
                 if (go != null)
                 {
                     go.Interact();
+
+                    // TODO HACK: This should raise some generic selection instead of unboxing
+                    if (go is Unit goAsUnit)
+                    {
+                        SelectedUnit = goAsUnit;
+                        UnitSelectedEvent.Raise(goAsUnit);
+                    }
+
                     break;
+                }
+            }
+        }
+    }
+
+    void HandleRightClick()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            Ray clickRaycast = MainGameplayCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit[] hits = Physics.RaycastAll(clickRaycast.origin, clickRaycast.direction, float.MaxValue, GroundLayerMask.value);
+            foreach (RaycastHit hit in hits)
+            {
+                Vector3 positionHit = hit.point;
+                
+                if (SelectedUnit != null)
+                {
+                    SelectedUnit.SendTowardsPosition(positionHit);
                 }
             }
         }

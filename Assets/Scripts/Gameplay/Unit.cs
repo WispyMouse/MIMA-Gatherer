@@ -5,12 +5,26 @@ using UnityEngine.AI;
 
 public class Unit : GameworldObject
 {
+    enum UnitCommandState
+    {
+        GatherClosestResource,
+        ReturnResourceToCenter,
+        FollowPath,
+        None,
+        GatheringNow,
+        ReturningNow
+    }
+
+    UnitCommandState curState { get; set; } = UnitCommandState.GatherClosestResource;
+
     public const float CloseEnoughToCorner = .01f;
     public const float CloseEnoughToResource = .15f;
 
     public int CrystalUnitCost = 50;
     public float ProductionTimeSeconds = 1f;
     public float MovementPerSecond = 8f;
+
+    public float TimeToReturnResource = 1f;
 
     public Vector3 DestinationPoint { get; set; }
 
@@ -67,6 +81,7 @@ public class Unit : GameworldObject
 
             if (totalDistance < shortestDistance)
             {
+                shortestDistance = totalDistance;
                 pathUsed = thisPath;
                 closestTarget = curTarget;
             }
@@ -83,8 +98,8 @@ public class Unit : GameworldObject
 
     T GoToNeareset<T>() where T : GameworldObject
     {
-        NavMeshPath pathToNearestCrystal;
-        T nearestThing = GetNearestObject<T>(out pathToNearestCrystal);
+        NavMeshPath pathToNearestThing;
+        T nearestThing = GetNearestObject<T>(out pathToNearestThing);
 
         if (nearestThing == null)
         {
@@ -93,7 +108,7 @@ public class Unit : GameworldObject
         }
 
         CurrentPathCornerIndex = 0;
-        CurrentPath = pathToNearestCrystal;
+        CurrentPath = pathToNearestThing;
         return nearestThing;
     }
 
@@ -166,18 +181,102 @@ public class Unit : GameworldObject
             return;
         }
 
-        if (CurrentTargetCrystals == null)
+        if (curState == UnitCommandState.FollowPath)
         {
-            // Need to find a next crystal
-            CurrentTargetCrystals = GoToNeareset<Crystals>();
+            if (IsHoldingResource)
+            {
+                curState = UnitCommandState.ReturnResourceToCenter;
+                GoToNeareset<Structure>();
+            }
+            else
+            {
+                curState = UnitCommandState.GatherClosestResource;
+                CurrentTargetCrystals = GoToNeareset<Crystals>();
+            }
+            
             return;
         }
 
-        if (Vector3.Distance(transform.position, CurrentTargetCrystals.transform.position) < CloseEnoughToResource)
+        if (curState == UnitCommandState.ReturnResourceToCenter)
         {
-            IsHoldingResource = true;
-            CurrentTargetCrystals = null;
-            GoToNeareset<Structure>();
+            // Need to find a next crystal
+            curState = UnitCommandState.ReturningNow;
+            StartCoroutine(StartSeekingNextResourceAfterReturningDelay(TimeToReturnResource));
+            return;
         }
+
+        if (curState == UnitCommandState.GatherClosestResource &&
+            CurrentTargetCrystals != null && Vector3.Distance(transform.position, CurrentTargetCrystals.transform.position) < CloseEnoughToResource)
+        {
+            StartCoroutine(StartReturningToBaseAfterDelay(CurrentTargetCrystals.TimeToGatherResource));
+            return;
+        }
+
+        Debug.Log("Reached destination. Now what?");
+    }
+
+    public void SendTowardsPosition(Vector3 position)
+    {
+        NavMeshPath pathToPoint = new NavMeshPath();
+        if (!Agent.CalculatePath(position, pathToPoint))
+        {
+            return;
+        }
+
+        CurrentPathCornerIndex = 0;
+        CurrentPath = pathToPoint;
+        curState = UnitCommandState.FollowPath;
+    }
+
+    public string GetCurrentTask()
+    {
+        switch (curState)
+        {
+            case UnitCommandState.None:
+                return "No job";
+            case UnitCommandState.FollowPath:
+                return "Follow Path";
+            case UnitCommandState.ReturnResourceToCenter:
+                return "Returning Resource";
+            case UnitCommandState.GatherClosestResource:
+                return "Gather Closest Resource";
+            case UnitCommandState.ReturningNow:
+                return "Returning Now";
+            case UnitCommandState.GatheringNow:
+                return "Gathering Now";
+            default:
+                return "?";
+        }
+    }
+
+    IEnumerator StartReturningToBaseAfterDelay(float delay)
+    {
+        curState = UnitCommandState.GatheringNow;
+
+        yield return new WaitForSeconds(delay);
+
+        IsHoldingResource = true;
+        HeldResource = CurrentTargetCrystals.ResourceName;
+        HeldResourceCount = CurrentTargetCrystals.AmountOfResourcesGathered;
+
+        CurrentTargetCrystals = null;
+        curState = UnitCommandState.ReturnResourceToCenter;
+        GoToNeareset<Structure>();
+    }
+
+    IEnumerator StartSeekingNextResourceAfterReturningDelay(float delay)
+    {
+        curState = UnitCommandState.ReturningNow;
+
+        yield return new WaitForSeconds(delay);
+
+        InventoryManagement.ChangeResource(HeldResource, HeldResourceCount);
+
+        IsHoldingResource = false;
+        HeldResource = string.Empty;
+        HeldResourceCount = 0;
+
+        curState = UnitCommandState.GatherClosestResource;
+        GoToNeareset<Crystals>();
     }
 }
