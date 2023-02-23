@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitPrefab: {fileID: 6976195979348214465, guid: a597808c289a8324786823fc39c9cdf0, type: 3}
-  DistanceToSpawnUnit: 1
+  DistanceToSpawnUnit: 10
 --- !u!54 &4025046860319859415
 Rigidbody:
   m_ObjectHideFlags: 0

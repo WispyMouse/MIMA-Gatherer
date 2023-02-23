@@ -32,7 +32,7 @@ public class Structure : GameworldObject
 
         Unit newUnit = Instantiate(UnitPrefab);
 
-        Vector3 randomOffset = Random.onUnitSphere;
+        Vector2 randomOffset = Random.insideUnitCircle.normalized;
         newUnit.transform.position = transform.position + new Vector3(randomOffset.x, 0, randomOffset.y);
 
         yield break;

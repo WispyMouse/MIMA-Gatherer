@@ -149,6 +149,7 @@ GameObject:
   - component: {fileID: 163981785258797259}
   - component: {fileID: 6261669744193504551}
   - component: {fileID: -8426483127042735152}
+  - component: {fileID: 1781655283669492658}
   m_Layer: 5
   m_Name: Gatherable Record
   m_TagString: Untagged
@@ -288,6 +289,28 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1781655283669492658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163981785258797255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5758ca93461aeeb4589456a052b07d74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DeveloperDescription:
+    _value: 
+  _showDebugFields: 0
+  _enableGizmoDebugging: 1
+  _debugColor: {r: 0, g: 1, b: 1, a: 1}
+  _previouslyRegisteredEvent: {fileID: 0}
+  _event: {fileID: 0}
+  _response:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &163981786241600610
 GameObject:
   m_ObjectHideFlags: 0
