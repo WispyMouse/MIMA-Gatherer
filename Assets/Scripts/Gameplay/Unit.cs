@@ -65,11 +65,6 @@ public class Unit : GameworldObject
 
     private void Awake()
     {
-        CrystalUnitCost.LoadFromConfiguration(ConfigurationManagement.ActiveConfiguration);
-        ProductionTimeSeconds.LoadFromConfiguration(ConfigurationManagement.ActiveConfiguration);
-        MovementPerSecond.LoadFromConfiguration(ConfigurationManagement.ActiveConfiguration);
-        TimeToReturnResource.LoadFromConfiguration(ConfigurationManagement.ActiveConfiguration);
-
         curState = UnitCommandState.GatherClosestResource;
         CurrentTargetCrystals = GoToNeareset<Crystals>();
     }

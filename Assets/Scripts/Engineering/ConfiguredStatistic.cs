@@ -32,7 +32,7 @@ public class ConfiguredStatistic<T>
         this.ConfigurationPath = configurationPath;
     }
 
-    public void LoadFromConfiguration(ConfigurationContainer configuration)
+    protected void LoadFromConfiguration(ConfigurationContainer configuration)
     {
         string foundValue;
         if (configuration.Configuration.TryGetValue(ConfigurationPath, out foundValue))

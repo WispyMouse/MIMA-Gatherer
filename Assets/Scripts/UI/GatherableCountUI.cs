@@ -14,7 +14,7 @@ public class GatherableCountUI : MonoBehaviour
     [SerializeReference]
     private TMP_Text CountLabel;
 
-    public void Awake()
+    public void Start()
     {
         UpdateCount();
     }

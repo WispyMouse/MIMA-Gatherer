@@ -11,7 +11,5 @@ public class Crystals : GameworldObject
 
     private void Awake()
     {
-        TimeToGatherResource.LoadFromConfiguration(ConfigurationManagement.ActiveConfiguration);
-        AmountOfResourcesGathered.LoadFromConfiguration(ConfigurationManagement.ActiveConfiguration);
     }
 }

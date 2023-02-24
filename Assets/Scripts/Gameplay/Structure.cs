@@ -12,7 +12,6 @@ public class Structure : GameworldObject
 
     private void Awake()
     {
-        DistanceToSpawnUnit.LoadFromConfiguration(ConfigurationManagement.ActiveConfiguration);
     }
 
     public override void Interact()

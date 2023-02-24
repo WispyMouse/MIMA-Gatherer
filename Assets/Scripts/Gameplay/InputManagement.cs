@@ -11,6 +11,9 @@ public class InputManagement : MonoBehaviour
     [SerializeReference]
     private Camera MainGameplayCamera;
 
+    [SerializeReference]
+    private CameraConfigurations CameraConfigurations;
+
     [SerializeField]
     private LayerMask GameworldObjectLayerMask;
 
@@ -23,9 +26,6 @@ public class InputManagement : MonoBehaviour
     private Unit SelectedUnit { get; set; }
 
     private HashSet<Directionality> CurrentInputDirectionalities { get; set; } = new HashSet<Directionality>();
-
-    [SerializeField]
-    private ConfiguredStatistic<float> CameraPanningMovementPerSecond = new ConfiguredStatistic<float>(10f, $"{nameof(InputManagement)}.{nameof(CameraPanningMovementPerSecond)}");
 
     public void Update()
     {
@@ -149,6 +149,6 @@ public class InputManagement : MonoBehaviour
             CurrentInputDirectionalities.RemoveWhere(dir => dir.XSign == 1 && dir.YSign == 0 && dir.ZSign == 0);
         }
 
-        PanCameraBasedOnInputDirections(Time.deltaTime * CameraPanningMovementPerSecond.Value);
+        PanCameraBasedOnInputDirections(Time.deltaTime * CameraConfigurations.CameraPanningMovementPerSecond.Value);
     }
 }

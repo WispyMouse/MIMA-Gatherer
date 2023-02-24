@@ -1,0 +1,68 @@
+{
+	"MapName": "Default Map",
+	
+	"ResourceNodes": [
+		{
+			"ResourceName": "Crystals",
+			"Position":
+			{
+				"x": "10",
+				"y": "0",
+				"z": "0"
+			}
+		},
+		{
+			"ResourceName": "Crystals",
+			"Position":
+			{
+				"x": "-15",
+				"y": "0",
+				"z": "-4"
+			}
+		},
+		{
+			"ResourceName": "Crystals",
+			"Position":
+			{
+				"x": "11",
+				"y": "0",
+				"z": "18"
+			}
+		},
+		{
+			"ResourceName": "Crystals",
+			"Position":
+			{
+				"x": "-3",
+				"y": "0",
+				"z": "-10"
+			}
+		},
+		{
+			"ResourceName": "Crystals",
+			"Position":
+			{
+				"x": "18",
+				"y": "18",
+				"z": "18"
+			}
+		}
+	],
+	"Structures": [
+	{
+		"Position":
+		{
+			"x": "0",
+			"y": "0",
+			"z": "0"
+		}
+	}
+	],
+	
+	"StartingInventory": [
+	{
+		"ResourceName": "Crystals",
+		"Amount": "50"
+	}
+	]
+}
