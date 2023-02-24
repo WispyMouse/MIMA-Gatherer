@@ -40,7 +40,7 @@ public class Unit : GameworldObject
     /// <summary>
     /// How many seconds does it take for this unit to return a resource to a structure?
     /// </summary>
-    public ConfiguredStatistic<int> TimeToReturnResource { get; set; } = new ConfiguredStatistic<int>(1, $"{nameof(Unit)}.{nameof(TimeToReturnResource)}");
+    public ConfiguredStatistic<float> TimeToReturnResource { get; set; } = new ConfiguredStatistic<float>(1, $"{nameof(Unit)}.{nameof(TimeToReturnResource)}");
 
     public Vector3 DestinationPoint { get; set; }
 

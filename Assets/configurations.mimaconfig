@@ -2,15 +2,22 @@
 	"Configuration": 
 		{
 			"Unit.CrystalUnitCost": "50",
-			"Unit.MovementPerSecond": "1000",
-			"Unit.ProductionTimeSeconds": "1",
-			"Unit.TimeToReturnResource": "1",
+			"Unit.MovementPerSecond": "50",
+			"Unit.ProductionTimeSeconds": ".6",
+			"Unit.TimeToReturnResource": ".6",
 			
-			"InventoryManagement.InitialCrystalCount": "50",
+			"InventoryManagement.InitialCrystalCount": "115",
 			
-			"Crystals.TimeToGatherResource": "1",
-			"Crystals.AmountOfResourcesGathered": "15",
+			"InputManagement.CameraPanningMovementPerSecond": "10",
 			
-			"Structure.DistanceToSpawnUnit": "1"
+			"Crystals.TimeToGatherResource": ".9",
+			"Crystals.AmountOfResourcesGathered": "14",
+			
+			"Structure.DistanceToSpawnUnit": "6",
+			
+			"ScreenPanningSensor.Width.Up": "50",
+			"ScreenPanningSensor.Width.Right": "50",
+			"ScreenPanningSensor.Width.Down": "50",
+			"ScreenPanningSensor.Width.Left": "50"
 		}
 }

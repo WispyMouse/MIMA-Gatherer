@@ -17,15 +17,21 @@ public class InputManagement : MonoBehaviour
     [SerializeField]
     private LayerMask GroundLayerMask;
 
-    [SerializeField]
+    [SerializeReference]
     private UnitEvent UnitSelectedEvent;
 
     private Unit SelectedUnit { get; set; }
+
+    private HashSet<Directionality> CurrentInputDirectionalities { get; set; } = new HashSet<Directionality>();
+
+    [SerializeField]
+    private ConfiguredStatistic<float> CameraPanningMovementPerSecond = new ConfiguredStatistic<float>(10f, $"{nameof(InputManagement)}.{nameof(CameraPanningMovementPerSecond)}");
 
     public void Update()
     {
         HandleLeftClick();
         HandleRightClick();
+        HandleCameraPanning();
     }
 
     void HandleLeftClick()
@@ -74,5 +80,75 @@ public class InputManagement : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void OnPanningStart(Directionality direction)
+    {
+        CurrentInputDirectionalities.Add(direction);
+    }
+
+    public void OnPanningEnd(Directionality direction)
+    {
+        CurrentInputDirectionalities.Remove(direction);
+    }
+
+    void PanCameraBasedOnInputDirections(float distanceAllowed)
+    {
+        Vector3 totalVector = Vector3.zero;
+        foreach (Directionality curDirection in CurrentInputDirectionalities)
+        {
+            totalVector += curDirection.GetMovementVector();
+        }
+
+        if (totalVector.magnitude == 0)
+        {
+            // No input, or only canceled out inputs
+            return;
+        }
+
+        totalVector.Normalize();
+
+        MainGameplayCamera.transform.Translate(totalVector * distanceAllowed, Space.World);
+    }
+
+    void HandleCameraPanning()
+    {
+        if (Input.GetKey(KeyCode.W))
+        {
+            CurrentInputDirectionalities.Add(new Directionality(0, 0, 1));
+        }
+        else if (Input.GetKeyUp(KeyCode.W))
+        {
+            CurrentInputDirectionalities.RemoveWhere(dir => dir.XSign == 0 && dir.YSign == 0 && dir.ZSign == 1);
+        }
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            CurrentInputDirectionalities.Add(new Directionality(-1, 0, 0));
+        }
+        else if (Input.GetKeyUp(KeyCode.A))
+        {
+            CurrentInputDirectionalities.RemoveWhere(dir => dir.XSign == -1 && dir.YSign == 0 && dir.ZSign == 0);
+        }
+
+        if (Input.GetKey(KeyCode.S))
+        {
+            CurrentInputDirectionalities.Add(new Directionality(0, 0, -1));
+        }
+        else if (Input.GetKeyUp(KeyCode.S))
+        {
+            CurrentInputDirectionalities.RemoveWhere(dir => dir.XSign == 0 && dir.YSign == 0 && dir.ZSign == -1);
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            CurrentInputDirectionalities.Add(new Directionality(1, 0, 0));
+        }
+        else if (Input.GetKeyUp(KeyCode.D))
+        {
+            CurrentInputDirectionalities.RemoveWhere(dir => dir.XSign == 1 && dir.YSign == 0 && dir.ZSign == 0);
+        }
+
+        PanCameraBasedOnInputDirections(Time.deltaTime * CameraPanningMovementPerSecond.Value);
     }
 }
