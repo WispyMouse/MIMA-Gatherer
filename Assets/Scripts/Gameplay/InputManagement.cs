@@ -76,7 +76,7 @@ public class InputManagement : MonoBehaviour
                 
                 if (SelectedUnit != null)
                 {
-                    SelectedUnit.SendTowardsPosition(positionHit);
+                    SelectedUnit.AddTaskToDo(new MovementTaskToDo(SelectedUnit, positionHit));
                 }
             }
         }

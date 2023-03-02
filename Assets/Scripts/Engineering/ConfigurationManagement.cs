@@ -6,36 +6,26 @@ public class ConfigurationManagement : MonoBehaviour
 {
     public static ConfigurationContainer ActiveConfiguration { get; set; } = new ConfigurationContainer();
     public string ConfigurationFilepath = "configurations.mimaconfig";
+    public string UnitFolderName = "Units";
 
     public string MapFilePath = "defaultmap.mimamap";
 
     [SerializeReference]
     private MapLoader MapLoaderInstance;
 
+    // TEMPORARY HACK: Just making convenient place for this
+    public static Dictionary<string, UnitSkeleton> UnitSkeletons { get; private set; } = new Dictionary<string, UnitSkeleton>();
+
     private void Awake()
     {
         string targetFilepath = Application.dataPath + "\\" + ConfigurationFilepath;
-
-        if (!System.IO.File.Exists(targetFilepath))
-        {
-            Debug.LogError($"Configuration file does not exist at {targetFilepath}");
-            return;
-        }
-
-        string allText = System.IO.File.ReadAllText(targetFilepath);
-        ConfigurationContainer configuration = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigurationContainer>(allText);
+        ConfigurationContainer configuration = LoadFromConfiguration<ConfigurationContainer>(targetFilepath);
         ActiveConfiguration = configuration;
 
+        LoadAllUnits();
+
         string mapFilePath = Application.dataPath + "\\" + MapFilePath;
-
-        if (!System.IO.File.Exists(mapFilePath))
-        {
-            Debug.LogError($"Map file does not exist at {mapFilePath}");
-            return;
-        }
-
-        string allMapText = System.IO.File.ReadAllText(mapFilePath);
-        GameplayMap map = Newtonsoft.Json.JsonConvert.DeserializeObject<GameplayMap>(allMapText);
+        GameplayMap map = LoadFromConfiguration<GameplayMap>(mapFilePath);
 
         if (map == null)
         {
@@ -56,4 +46,37 @@ public class ConfigurationManagement : MonoBehaviour
     {
         InventoryManagement.Grant(MapLoaderInstance.LoadedMap.StartingInventory);
     }
+
+    private void LoadAllUnits()
+    {
+        string unitDirectory = Application.dataPath + "\\" + UnitFolderName;
+        string[] units = System.IO.Directory.GetFiles(unitDirectory, "*.unitconfig");
+        foreach (string curUnitPath in units)
+        {
+            UnitSkeleton thisUnitSkeleton = UnitSkeleton.LoadFromFile(curUnitPath);
+            UnitSkeletons.Add(thisUnitSkeleton.FriendlyName, thisUnitSkeleton);
+        }
+    }
+
+#nullable enable
+    public static T? LoadFromConfiguration<T>(string path) where T : new()
+    {
+        if (!System.IO.File.Exists(path))
+        {
+            Debug.LogError($"File at path [{path}] does not exist, could not load configuration");
+            return default(T);
+        }
+
+        string allText = System.IO.File.ReadAllText(path);
+        T configuration = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(allText);
+
+        if (configuration == null)
+        {
+            Debug.LogError($"File at path [{path}] does exist, but could not be deserialized in to {nameof(T)}");
+            return default(T);
+        }
+
+        return configuration;
+    }
+#nullable restore
 }

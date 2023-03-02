@@ -1,0 +1,13 @@
+{
+	"UnitName": "Cheap Demo",
+	"FriendlyName" : "demounitone",
+	"Costs": [
+		{
+			"Resource": "Wood",
+			"Cost": 50
+		}
+	],
+	"ProductionTimeSeconds": 1.0,
+	"MovementPerSecond": 5.0,
+	"TimeToReturnResource": .24
+}

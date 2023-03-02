@@ -1,0 +1,17 @@
+{
+	"UnitName": "Speedy Demo",
+	"FriendlyName" : "demounittwo",
+	"Costs": [
+		{
+			"Resource": "Wood",
+			"Cost": 75
+		},
+		{
+			"Resource": "Stone",
+			"Cost": 75
+		}
+	],
+	"ProductionTimeSeconds": 1.6,
+	"MovementPerSecond": 18.0,
+	"TimeToReturnResource": .35
+}

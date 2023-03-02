@@ -5,9 +5,9 @@ using UnityEngine;
 
 [System.Serializable]
 [CreateAssetMenu(
-    fileName = "UnitEvent.asset",
-    menuName = "Game Events/Custom/Unit Event")]
-public class UnitEvent : GameEventBase<Unit>
+    fileName = "StructureEvent.asset",
+    menuName = "Game Events/Custom/Structure Event")]
+public class StructureEvent : GameEventBase<Structure>
 {
 
 }

@@ -48,12 +48,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ed9b1f85be542d41b6f6cc53a459c58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CrystalUnitCost: 50
-  ProductionTimeSeconds: 1
-  MovementPerSecond: 8
-  Agent: {fileID: 616595115639335596}
+  GameworldUnitPF: {fileID: 6976195979348214465}
+  _Agent: {fileID: 616595115639335596}
   AttachedRigidbody: {fileID: 1544117429268343248}
-  DestinationReachedEvent: {fileID: 11400000, guid: 526d381eb27c021478d25304a2914567, type: 2}
 --- !u!54 &1544117429268343248
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -46,7 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bff62de882a14254dba821ce0ec3b7ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnitPrefab: {fileID: 6976195979348214465, guid: a597808c289a8324786823fc39c9cdf0, type: 3}
+  GameworldUnitPF: {fileID: 6976195979348214465, guid: a597808c289a8324786823fc39c9cdf0, type: 3}
+  StructureSelectedEvent: {fileID: 11400000, guid: eaaffd7a66995c448973ab2f7a805173, type: 2}
 --- !u!54 &4025046860319859415
 Rigidbody:
   m_ObjectHideFlags: 0
