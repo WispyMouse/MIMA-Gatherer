@@ -21,7 +21,7 @@ public class GatherableCountUI : MonoBehaviour
 
     public void GatherableIntegerCountUpdated(ResourceChangeData resourceChangeData)
     {
-        if (!resourceChangeData.ResourceName.Equals(ResourceToTrack, System.StringComparison.InvariantCultureIgnoreCase))
+        if (!resourceChangeData.FriendlyName.Equals(ResourceToTrack, System.StringComparison.InvariantCultureIgnoreCase))
         {
             return;
         }
@@ -52,7 +52,7 @@ public class GatherableCountUI : MonoBehaviour
     public void SetResource(string resourceName)
     {
         ResourceToTrack = resourceName;
-        ResourceNameLabel.text = resourceName;
+        ResourceNameLabel.text = ConfigurationManagement.GatherableSkeletons[resourceName].ResourceName;
         UpdateCount();
     }
 }

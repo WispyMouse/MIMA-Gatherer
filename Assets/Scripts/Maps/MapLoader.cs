@@ -7,7 +7,9 @@ public class MapLoader : MonoBehaviour
     [SerializeReference]
     private Structure StructurePrefab;
     [SerializeReference]
-    private Crystals ResourcePrefab;
+    private Gatherable GatherablePrefab;
+    [SerializeReference]
+    private Unit UnitPrefab;
 
     public GameplayMap LoadedMap { get; private set; }
     List<GameworldObject> SpawnedObjects { get; set; } = new List<GameworldObject>();
@@ -16,16 +18,25 @@ public class MapLoader : MonoBehaviour
     {
         LoadedMap = map;
 
-        foreach (StartingResource sr in map.ResourceNodes)
+        foreach (StartingGatherable sr in map.ResourceNodes)
         {
-            Crystals newResource = Instantiate(ResourcePrefab, sr.Position, Quaternion.identity);
+            Gatherable newResource = Instantiate(GatherablePrefab, sr.Position, Quaternion.identity);
+            newResource.AssignGatherableSkeleton(ConfigurationManagement.GatherableSkeletons[sr.FriendlyName]);
             SpawnedObjects.Add(newResource);
         }
 
         foreach (StartingStructure ss in map.Structures)
         {
             Structure structure = Instantiate(StructurePrefab, ss.Position, Quaternion.identity);
+            structure.AssignStructureSkeleton(ConfigurationManagement.StructureSkeletons[ss.FriendlyName]);
             SpawnedObjects.Add(structure);
+        }
+
+        foreach (StartingUnit su in map.Units)
+        {
+            Unit unit = Instantiate(UnitPrefab, su.Position, Quaternion.identity);
+            unit.AssignUnitSkeleton(ConfigurationManagement.UnitSkeletons[su.FriendlyName]);
+            SpawnedObjects.Add(unit);
         }
     }
 

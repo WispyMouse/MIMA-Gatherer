@@ -18,9 +18,25 @@ public class Unit : GameworldObject
 
     public ResourceCost HeldResources { get; private set; } = null;
 
+    [SerializeReference]
+    private MeshRenderer ColorableModel;
+
+    [SerializeReference]
+    private Transform ScalableModel;
+
+    public override string FriendlyName => UnitSkeletonData.FriendlyName;
+    public override string DisplayName => UnitSkeletonData.UnitName;
+
     public void AssignUnitSkeleton(UnitSkeleton data)
     {
         this.UnitSkeletonData = data;
+
+        this.ScalableModel.localScale = Vector3.one * data.ModelScale;
+
+        if (ColorUtility.TryParseHtmlString(data.ModelColor, out Color parsedColor))
+        {
+            this.ColorableModel.material.color = parsedColor;
+        }
     }
 
     public void StartOperations()
@@ -30,9 +46,14 @@ public class Unit : GameworldObject
 
     T GetNearestObject<T>(out NavMeshPath pathToResource) where T : GameworldObject
     {
-        pathToResource = null;
         T[] allTargets = GameObject.FindObjectsOfType<T>();
-        if (allTargets.Length == 0)
+        return GetNearestObject<T>(out pathToResource, new List<T>(allTargets));
+    }
+
+    T GetNearestObject<T>(out NavMeshPath pathToResource, List<T> consideredResources) where T : GameworldObject
+    {
+        pathToResource = null;
+        if (consideredResources.Count == 0)
         {
             return null;
         }
@@ -40,7 +61,7 @@ public class Unit : GameworldObject
         float shortestDistance = float.MaxValue;
         NavMeshPath pathUsed = null;
         T closestTarget = null;
-        foreach (T curTarget in allTargets)
+        foreach (T curTarget in consideredResources)
         {
             NavMeshPath thisPath = new NavMeshPath();
             if (!Agent.CalculatePath(curTarget.transform.position, thisPath))
@@ -74,29 +95,25 @@ public class Unit : GameworldObject
         return closestTarget;
     }
 
-    T GoToNeareset<T>() where T : GameworldObject
+    Structure GetNearestStructureThatAcceptsHeldResource(out NavMeshPath pathToResource)
     {
-        NavMeshPath pathToNearestThing;
-        T nearestThing = GetNearestObject<T>(out pathToNearestThing);
+        Structure[] allTargets = GameObject.FindObjectsOfType<Structure>();
+        List<Structure> consideredStructures = new List<Structure>();
 
-        if (nearestThing == null)
+        foreach (Structure target in allTargets)
         {
-            Debug.Log("Can't find it, boss!");
-            return null;
+            if (target.StructureSkeletonData.AcceptedResources == null)
+            {
+                continue;
+            }
+
+            if (target.StructureSkeletonData.AcceptedResources.Contains(HeldResources.Resource))
+            {
+                consideredStructures.Add(target);
+            }
         }
 
-        AddTaskToDo(new MovementTaskToDo(this, nearestThing.transform.position));
-        return nearestThing;
-    }
-
-    public string GetCurrentTask()
-    {
-        if (CurrentTask != null)
-        {
-            return CurrentTask.OperationDescription;
-        }
-
-        return "Nothing!";
+        return GetNearestObject<Structure>(out pathToResource, consideredStructures);
     }
 
     public void ActivateBrainCell()
@@ -121,16 +138,16 @@ public class Unit : GameworldObject
             return;
         }
 
-        NavMeshPath foundPathToCrystals = null;
-        Crystals nearestCrystals = GetNearestObject<Crystals>(out foundPathToCrystals);
-        if (nearestCrystals == null)
+        NavMeshPath foundPathToGatherable = null;
+        Gatherable nearestGatherable = GetNearestObject<Gatherable>(out foundPathToGatherable);
+        if (nearestGatherable == null)
         {
             Debug.Log("There are no resources, so what should I be doing?");
             return;
         }
 
-        AddTaskToDo(new HarvestTaskToDo(this, nearestCrystals));
-        AddTaskToDo(new MovementTaskToDo(this, nearestCrystals.transform.position, foundPathToCrystals));
+        AddTaskToDo(new HarvestTaskToDo(this, nearestGatherable));
+        AddTaskToDo(new MovementTaskToDo(this, nearestGatherable.transform.position, foundPathToGatherable));
     }
 
     public void StartHoldingResources(string resourceName, int amount)

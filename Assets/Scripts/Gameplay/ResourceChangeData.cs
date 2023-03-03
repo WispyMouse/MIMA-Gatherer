@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public struct ResourceChangeData
 {
-    public string ResourceName;
+    public string FriendlyName;
     public int OldAmount;
     public int NewAmount;
     public int Delta

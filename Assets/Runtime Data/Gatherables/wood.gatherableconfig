@@ -1,0 +1,8 @@
+{
+	"ResourceName": "Wood",
+	"FriendlyName" : "wood",
+	"ModelColor": "#804020",
+	"ModelScale": 1,
+	"TimeToGatherResource": .6,
+	"AmountOfResourcesGathered": 15
+}

@@ -374,7 +374,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _debugValue:
-    ResourceName: 
+    FriendlyName: 
     OldAmount: 0
     NewAmount: 0
 --- !u!1 &489372980
@@ -408,6 +408,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ConfigurationFilepath: configurations.mimaconfig
   UnitFolderName: Units
+  StructureFolderName: Structures
+  GatherableFolderName: Gatherables
+  RootFolderName: Runtime Data
   MapFilePath: defaultmap.mimamap
   MapLoaderInstance: {fileID: 555966133}
 --- !u!4 &489372982
@@ -532,7 +535,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StructurePrefab: {fileID: 1518202127289736808, guid: b9966146918bc8c44835eb764baed0b2, type: 3}
-  ResourcePrefab: {fileID: 3641486040113261354, guid: 1e938593c880bc8458408bc81b6837ac, type: 3}
+  GatherablePrefab: {fileID: 3641486040113261354, guid: 1e938593c880bc8458408bc81b6837ac, type: 3}
+  UnitPrefab: {fileID: 6976195979348214465, guid: a597808c289a8324786823fc39c9cdf0, type: 3}
 --- !u!4 &555966134
 Transform:
   m_ObjectHideFlags: 0
@@ -1251,7 +1255,7 @@ GameObject:
   - component: {fileID: 988062034}
   - component: {fileID: 988062033}
   m_Layer: 5
-  m_Name: Selected Unit Summary
+  m_Name: Selected Gameworld Object Summary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1944,7 +1948,7 @@ GameObject:
   - component: {fileID: 1909475746}
   - component: {fileID: 1909475748}
   m_Layer: 5
-  m_Name: Selected Unit Panel
+  m_Name: Selected Gameworld Object Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2026,7 +2030,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeefc3a56269e084391aaa3f0f99c441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnitText: {fileID: 988062033}
+  DisplayText: {fileID: 988062033}
+  PanelToggle: {fileID: 527653678}
 --- !u!114 &1909475748
 MonoBehaviour:
   m_ObjectHideFlags: 0

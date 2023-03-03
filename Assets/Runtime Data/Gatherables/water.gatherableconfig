@@ -1,0 +1,8 @@
+{
+	"ResourceName": "Water",
+	"FriendlyName" : "water",
+	"ModelColor": "#8888FF",
+	"ModelScale": .7,
+	"TimeToGatherResource": .15,
+	"AmountOfResourcesGathered": 5
+}

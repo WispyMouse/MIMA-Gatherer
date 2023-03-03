@@ -5,25 +5,25 @@ using UnityEngine;
 public class HarvestTaskToDo : TaskToDo
 {
     public Unit PerformingObjectAsUnit { get; private set; }
-    public Crystals CrystalsTarget { get; private set; }
+    public Gatherable GatherablesTarget { get; private set; }
 
-    public HarvestTaskToDo(Unit performingUnit, Crystals crystalsTarget) : base(performingUnit, $"Gathering {crystalsTarget.ResourceName}")
+    public HarvestTaskToDo(Unit performingUnit, Gatherable gatherablesTarget) : base(performingUnit, $"Gathering {gatherablesTarget.GatherableSkeletonData.ResourceName}")
     {
         this.PerformingObjectAsUnit = performingUnit;
-        this.CrystalsTarget = crystalsTarget;
+        this.GatherablesTarget = gatherablesTarget;
     }
 
     public override void ProcessAndCalculate()
     {
         base.ProcessAndCalculate();
 
-        this.SetEstimationAndSpawnTimer(CrystalsTarget.TimeToGatherResource.Value);
+        this.SetEstimationAndSpawnTimer(GatherablesTarget.GatherableSkeletonData.TimeToGatherResource);
     }
 
     public override void TaskCompleted()
     {
         base.TaskCompleted();
 
-        PerformingObjectAsUnit.StartHoldingResources(CrystalsTarget.ResourceName, CrystalsTarget.AmountOfResourcesGathered.Value);
+        PerformingObjectAsUnit.StartHoldingResources(GatherablesTarget.GatherableSkeletonData.FriendlyName, GatherablesTarget.GatherableSkeletonData.AmountOfResourcesGathered);
     }
 }

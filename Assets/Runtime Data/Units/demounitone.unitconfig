@@ -3,11 +3,13 @@
 	"FriendlyName" : "demounitone",
 	"Costs": [
 		{
-			"Resource": "Wood",
+			"Resource": "wood",
 			"Cost": 50
 		}
 	],
 	"ProductionTimeSeconds": 1.0,
 	"MovementPerSecond": 5.0,
-	"TimeToReturnResource": .24
+	"TimeToReturnResource": .24,
+	"ModelColor": "#00FF00",
+	"ModelScale": 1
 }

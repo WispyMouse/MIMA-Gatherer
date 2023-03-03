@@ -14,14 +14,14 @@ public class GatherableHUD : MonoBehaviour
 
     public void ResourceCountUpdated(ResourceChangeData resourceChangeData)
     {
-        if (ResourceNameToGatherableMap.ContainsKey(resourceChangeData.ResourceName))
+        if (ResourceNameToGatherableMap.ContainsKey(resourceChangeData.FriendlyName))
         {
             // Nothing to do here
             return;
         }
 
         GatherableCountUI newCountUI = Instantiate(GatherableCountUIPrefab, GatherableCountUIParent);
-        ResourceNameToGatherableMap.Add(resourceChangeData.ResourceName, newCountUI);
-        newCountUI.SetResource(resourceChangeData.ResourceName);
+        ResourceNameToGatherableMap.Add(resourceChangeData.FriendlyName, newCountUI);
+        newCountUI.SetResource(resourceChangeData.FriendlyName);
     }
 }

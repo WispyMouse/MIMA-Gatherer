@@ -1,0 +1,17 @@
+{
+	"StructureName": "Basic Nexus",
+	"FriendlyName" : "demonexus",
+	"Costs": [
+		{
+			"Resource": "Wood",
+			"Cost": 100
+		}
+	],
+	"ProductionTimeSeconds": 2.5,
+	"ModelColor": "#FFFFFF",
+	"ModelScale": 1,
+	
+	"AcceptedResources": [
+		"wood"
+	]
+}

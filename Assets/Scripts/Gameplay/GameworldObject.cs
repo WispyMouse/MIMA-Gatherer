@@ -13,6 +13,10 @@ public class GameworldObject : MonoBehaviour
     protected Stack<TaskToDo> TaskStack { get; set; } = new Stack<TaskToDo>();
 
     protected bool IsRunningTasks { get; private set; } = false;
+
+    public virtual string FriendlyName => this.name;
+    public virtual string DisplayName => this.name;
+
     public TaskToDo CurrentTask
     {
         get
@@ -110,5 +114,15 @@ public class GameworldObject : MonoBehaviour
     protected virtual void ClearedTaskStack()
     {
 
+    }
+
+    public virtual string GetCurrentTask()
+    {
+        if (CurrentTask != null)
+        {
+            return CurrentTask.OperationDescription;
+        }
+
+        return "Nothing!";
     }
 }

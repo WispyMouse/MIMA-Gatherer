@@ -48,6 +48,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameworldUnitPF: {fileID: 6976195979348214465, guid: a597808c289a8324786823fc39c9cdf0, type: 3}
   StructureSelectedEvent: {fileID: 11400000, guid: eaaffd7a66995c448973ab2f7a805173, type: 2}
+  ColorableModel: {fileID: 916697148026707596}
+  ScalableModel: {fileID: 6807366879163644394}
 --- !u!54 &4025046860319859415
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -125,6 +127,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad4b51c20140f6b4b89c07224ff1667d, type: 3}
+--- !u!23 &916697148026707596 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7132851819103796892, guid: ad4b51c20140f6b4b89c07224ff1667d, type: 3}
+  m_PrefabInstance: {fileID: 7945539152866500624}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6807366879163644394 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3475822196350130682, guid: ad4b51c20140f6b4b89c07224ff1667d, type: 3}

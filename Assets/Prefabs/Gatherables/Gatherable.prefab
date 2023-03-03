@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3641486040113261354}
   - component: {fileID: 3641486040113261357}
   m_Layer: 6
-  m_Name: Crystals
+  m_Name: Gatherable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,9 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8e5e9f0710a17243840a65c0f0c0446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TimeToGatherResource: 1
-  AmountOfResourcesGathered: 50
-  ResourceName: Crystals
+  GameworldUnitPF: {fileID: 6976195979348214465, guid: a597808c289a8324786823fc39c9cdf0, type: 3}
+  ColorableModel: {fileID: 1051669141607263999}
+  ScalableModel: {fileID: 4072332683340273481}
 --- !u!54 &3641486040113261357
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -130,6 +130,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c0f9e9c136c44944922621d2d059ac9, type: 3}
+--- !u!23 &1051669141607263999 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4328363593976351926, guid: 6c0f9e9c136c44944922621d2d059ac9, type: 3}
+  m_PrefabInstance: {fileID: 3641486040508408393}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4072332683340273481 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 723668580951520512, guid: 6c0f9e9c136c44944922621d2d059ac9, type: 3}

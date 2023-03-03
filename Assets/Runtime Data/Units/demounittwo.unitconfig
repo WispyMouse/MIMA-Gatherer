@@ -13,5 +13,7 @@
 	],
 	"ProductionTimeSeconds": 1.6,
 	"MovementPerSecond": 18.0,
-	"TimeToReturnResource": .35
+	"TimeToReturnResource": .35,
+	"ModelColor": "#00FF00",
+	"ModelScale": 1
 }

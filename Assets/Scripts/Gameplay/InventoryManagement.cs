@@ -18,18 +18,11 @@ public class InventoryManagement : MonoBehaviour
     [SerializeReference]
     private ResourceChangeEvent ResourceChangeEvent;
 
-    public ConfiguredStatistic<int> AdditionalCrystalCount { get; set; } = new ConfiguredStatistic<int>(0, $"{nameof(InventoryManagement)}.{nameof(AdditionalCrystalCount)}");
-
     private void Awake()
     {
         Instance = this;
 
         ActiveInventoryInstance = new Inventory();
-    }
-
-    private void Start()
-    {
-        ChangeResource(nameof(Crystals), AdditionalCrystalCount.Value);
     }
 
     public static bool CanAfford(List<ResourceCost> costs)
@@ -73,7 +66,7 @@ public class InventoryManagement : MonoBehaviour
         int previousCount = ActiveInventoryInstance.GetGatherableCount(resourceName).Count;
         int newCount = previousCount + delta;
         ActiveInventoryInstance.SetGatherableCount(resourceName, newCount);
-        Instance.ResourceChangeEvent.Raise(new ResourceChangeData() { ResourceName = resourceName, OldAmount = previousCount, NewAmount = newCount });
+        Instance.ResourceChangeEvent.Raise(new ResourceChangeData() { FriendlyName = resourceName, OldAmount = previousCount, NewAmount = newCount });
     }
 
     public static void Grant(List<StartingInventoryElement> startingInventory)

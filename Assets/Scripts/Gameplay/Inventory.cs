@@ -16,7 +16,7 @@ public class Inventory
 
         if (!ResourceNamesToCounters.TryGetValue(gatherableName, out counter))
         {
-            counter = new InventoryCounter(0);
+            counter = new InventoryCounter(0, ConfigurationManagement.GatherableSkeletons[gatherableName]);
             ResourceNamesToCounters.Add(gatherableName, counter);
         }
 
@@ -25,15 +25,7 @@ public class Inventory
 
     public void SetGatherableCount(string gatherableName, int newCount)
     {
-        InventoryCounter counter;
-
-        if (!ResourceNamesToCounters.TryGetValue(gatherableName, out counter))
-        {
-            ResourceNamesToCounters.Add(gatherableName, new InventoryCounter(newCount));
-        }
-        else
-        {
-            counter.Count = newCount;
-        }
+        InventoryCounter counter = GetGatherableCount(gatherableName);
+        counter.Count = newCount;
     }
 }

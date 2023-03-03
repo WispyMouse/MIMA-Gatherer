@@ -3,7 +3,7 @@
 	
 	"ResourceNodes": [
 		{
-			"ResourceName": "Ore",
+			"FriendlyName": "ore",
 			"Position":
 			{
 				"x": "-15",
@@ -12,7 +12,7 @@
 			}
 		},
 		{
-			"ResourceName": "Water",
+			"FriendlyName": "water",
 			"Position":
 			{
 				"x": "11",
@@ -21,7 +21,7 @@
 			}
 		},
 		{
-			"ResourceName": "Stone",
+			"FriendlyName": "stone",
 			"Position":
 			{
 				"x": "-3",
@@ -30,7 +30,7 @@
 			}
 		},
 		{
-			"ResourceName": "Wood",
+			"FriendlyName": "wood",
 			"Position":
 			{
 				"x": "18",
@@ -41,6 +41,7 @@
 	],
 	"Structures": [
 	{
+		"FriendlyName": "demonexus",
 		"Position":
 		{
 			"x": "0",
@@ -52,11 +53,11 @@
 	
 	"StartingInventory": [
 		{
-			"ResourceName": "Wood",
+			"ResourceName": "wood",
 			"Amount": "50"
 		},
 		{
-			"ResourceName": "Stone",
+			"ResourceName": "stone",
 			"Amount": "15"
 		}
 	]

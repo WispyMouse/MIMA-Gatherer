@@ -1,0 +1,8 @@
+{
+	"ResourceName": "Stone",
+	"FriendlyName" : "stone",
+	"ModelColor": "#A0A0A0",
+	"ModelScale": 2,
+	"TimeToGatherResource": 2.1,
+	"AmountOfResourcesGathered": 12
+}

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class StartingStructure
+public class StartingUnit
 {
     public Vector3 Position;
     public string FriendlyName;
