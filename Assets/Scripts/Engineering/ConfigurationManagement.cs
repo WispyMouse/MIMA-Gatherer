@@ -59,6 +59,18 @@ public class ConfigurationManagement : MonoBehaviour
     }
 
 #nullable enable
+    public static string LoadStringFromConfiguration(string path)
+    {
+        if (!System.IO.File.Exists(path))
+        {
+            Debug.LogError($"File at path [{path}] does not exist, could not load configuration");
+            return string.Empty;
+        }
+
+        string allText = System.IO.File.ReadAllText(path);
+        return allText;
+    }
+
     public static T? LoadFromConfiguration<T>(string path) where T : new()
     {
         if (!System.IO.File.Exists(path))
@@ -69,7 +81,7 @@ public class ConfigurationManagement : MonoBehaviour
 
         string allText = System.IO.File.ReadAllText(path);
         T configuration = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(allText);
-
+        
         if (configuration == null)
         {
             Debug.LogError($"File at path [{path}] does exist, but could not be deserialized in to {nameof(T)}");

@@ -11,14 +11,17 @@ public class SpawnUnitTaskToDo : TaskToDo
         this.ConstructUnit = constructUnit;
     }
 
-    public override void Tick(float deltaTime)
+    public override void ProcessAndCalculate()
     {
-        base.Tick(deltaTime);
+        base.ProcessAndCalculate();
 
-        if (this.TimeSpentOnTask > ConstructUnit.UnitToConstruct.ProductionTimeSeconds)
+        if (!ConstructUnit.PayCosts())
         {
-            TaskCompleted();
+            this.RejectAsNotPossible();
+            return;
         }
+
+        this.SetEstimationAndSpawnTimer(ConstructUnit.UnitToConstruct.ProductionTimeSeconds);
     }
 
     public override void TaskCompleted()

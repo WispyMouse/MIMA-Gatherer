@@ -11,6 +11,8 @@ public class GameworldObject : MonoBehaviour
     private ConfiguredStatistic<float> DistanceToSpawnUnit { get; set; } = new ConfiguredStatistic<float>(1f, $"{nameof(Structure)}.{nameof(DistanceToSpawnUnit)}");
 
     protected Stack<TaskToDo> TaskStack { get; set; } = new Stack<TaskToDo>();
+
+    protected bool IsRunningTasks { get; private set; } = false;
     public TaskToDo CurrentTask
     {
         get
@@ -29,10 +31,8 @@ public class GameworldObject : MonoBehaviour
 
     }
 
-    public virtual IEnumerator SpawnUnitAfterWaiting(UnitSkeleton toSpawn)
+    public virtual void SpawnUnit(UnitSkeleton toSpawn)
     {
-        yield return new WaitForSeconds(toSpawn.ProductionTimeSeconds);
-
         Unit newUnit = Instantiate(GameworldUnitPF);
         newUnit.AssignUnitSkeleton(toSpawn);
 
@@ -40,8 +40,6 @@ public class GameworldObject : MonoBehaviour
         newUnit.transform.position = transform.position + new Vector3(randomOffset.x, 0, randomOffset.y);
 
         newUnit.StartOperations();
-
-        yield break;
     }
 
     public void AssignTaskToDo(TaskToDo task)
@@ -75,9 +73,15 @@ public class GameworldObject : MonoBehaviour
     {
         if (CurrentTask == null)
         {
-            ClearedTaskStack();
+            if (IsRunningTasks)
+            {
+                ClearedTaskStack();
+                IsRunningTasks = false;
+            }
             return;
         }
+
+        IsRunningTasks = true;
 
         if (CurrentTask.Rejected)
         {

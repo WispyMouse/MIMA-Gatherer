@@ -117,6 +117,8 @@ public class Unit : GameworldObject
             }
             AddTaskToDo(new ReturnResourceTaskToDo(this, nearestStructure));
             AddTaskToDo(new MovementTaskToDo(this, nearestStructure.transform.position, foundPathToStructure));
+
+            return;
         }
 
         NavMeshPath foundPathToCrystals = null;
@@ -126,6 +128,7 @@ public class Unit : GameworldObject
             Debug.Log("There are no resources, so what should I be doing?");
             return;
         }
+
         AddTaskToDo(new HarvestTaskToDo(this, nearestCrystals));
         AddTaskToDo(new MovementTaskToDo(this, nearestCrystals.transform.position, foundPathToCrystals));
     }

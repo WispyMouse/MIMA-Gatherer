@@ -13,14 +13,11 @@ public class HarvestTaskToDo : TaskToDo
         this.CrystalsTarget = crystalsTarget;
     }
 
-    public override void Tick(float deltaTime)
+    public override void ProcessAndCalculate()
     {
-        base.Tick(deltaTime);
+        base.ProcessAndCalculate();
 
-        if (this.TimeSpentOnTask >= CrystalsTarget.TimeToGatherResource.Value)
-        {
-            TaskCompleted();
-        }
+        this.SetEstimationAndSpawnTimer(CrystalsTarget.TimeToGatherResource.Value);
     }
 
     public override void TaskCompleted()

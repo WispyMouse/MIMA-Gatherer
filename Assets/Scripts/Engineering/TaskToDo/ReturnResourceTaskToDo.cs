@@ -13,14 +13,11 @@ public class ReturnResourceTaskToDo : TaskToDo
         this.ReturnTarget = returnTarget;
     }
 
-    public override void Tick(float deltaTime)
+    public override void ProcessAndCalculate()
     {
-        base.Tick(deltaTime);
+        base.ProcessAndCalculate();
 
-        if (this.TimeSpentOnTask >= PerformingObjectAsUnit.UnitSkeletonData.TimeToReturnResource)
-        {
-            TaskCompleted();
-        }
+        this.SetEstimationAndSpawnTimer(PerformingObjectAsUnit.UnitSkeletonData.TimeToReturnResource);
     }
 
     public override void TaskCompleted()

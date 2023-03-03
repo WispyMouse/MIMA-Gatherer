@@ -13,16 +13,19 @@ public class ConstructUnitAction
         this.ObjectThatConstructs = objectThatConstructs;
     }
 
-    public void ExecutePlanOnce()
+    public bool PayCosts()
     {
         if (InventoryManagement.CanAfford(UnitToConstruct.Costs))
         {
             InventoryManagement.ChangeResource(UnitToConstruct.Costs);
-            ObjectThatConstructs.StartCoroutine(ObjectThatConstructs.SpawnUnitAfterWaiting(UnitToConstruct));
+            return true;
         }
-        else
-        {
-            Debug.Log("Could not afford all of the costs");
-        }
+
+        return false;
+    }
+
+    public void ExecutePlanOnce()
+    {
+        ObjectThatConstructs.SpawnUnit(UnitToConstruct);
     }
 }

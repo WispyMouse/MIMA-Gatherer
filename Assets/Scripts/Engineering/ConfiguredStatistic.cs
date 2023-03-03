@@ -26,9 +26,9 @@ public class ConfiguredStatistic<T>
 
     }
 
-    public ConfiguredStatistic(T valueOfConfiguration, string configurationPath)
+    public ConfiguredStatistic(T defaultUnconfiguredValue, string configurationPath)
     {
-        this._value = valueOfConfiguration;
+        this._value = defaultUnconfiguredValue;
         this.ConfigurationPath = configurationPath;
     }
 
@@ -37,21 +37,25 @@ public class ConfiguredStatistic<T>
         string foundValue;
         if (configuration.Configuration.TryGetValue(ConfigurationPath, out foundValue))
         {
-            _value = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(foundValue);
-
-            if (_value != null)
+            if (typeof(T) == typeof(string))
             {
-                ValueLoaded = true;
-                return;
+                _value = (T)(object)foundValue;
             }
             else
+            {
+                _value = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(foundValue);
+            }            
+
+            if (_value == null)
             {
                 Debug.LogError($"Found configuration at path {ConfigurationPath} but it could not be boxed in to type {typeof(T).Name}");
             }
         }
         else
         {
-            Debug.LogError($"Unable to find a configuration at path {ConfigurationPath}");
+            Debug.Log($"Unable to find a configuration at path {ConfigurationPath}");
         }
+
+        ValueLoaded = true;
     }
 }

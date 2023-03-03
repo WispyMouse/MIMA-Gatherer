@@ -22,6 +22,18 @@
 			"ScreenPanningSensor.Width.Up": "50",
 			"ScreenPanningSensor.Width.Right": "50",
 			"ScreenPanningSensor.Width.Down": "50",
-			"ScreenPanningSensor.Width.Left": "50"
+			"ScreenPanningSensor.Width.Left": "50",
+			
+			"SpawnUnitTaskToDo.ShowTimer": "true",
+			"SpawnUnitTaskToDo.DistanceAboveTaskPerformer": "8",
+			"SpawnUnitTaskToDo.Scale": "3",
+			"SpawnUnitTaskToDo.TimerFrontColor": "#FFFF00",
+			
+			"HarvestTaskToDo.ShowTimer": "true",
+			"HarvestTaskToDo.DistanceAboveTaskPerformer": "4",
+			"HarvestTaskToDo.Scale": "1",
+			"HarvestTaskToDo.TimerFrontColor": "#0000FF",
+			
+			"ReturnResourceTaskToDo.ShowTimer": "false"
 		}
 }

@@ -30,6 +30,7 @@ public class BuildThingButton : MonoBehaviour
 
     public void OnClick()
     {
-        Construction.ObjectThatConstructs.AddTaskToDo(new SpawnUnitTaskToDo(Construction.ObjectThatConstructs, Construction));
+        SpawnUnitTaskToDo newTask = new SpawnUnitTaskToDo(Construction.ObjectThatConstructs, Construction);
+        Construction.ObjectThatConstructs.AddTaskToDo(newTask);
     }
 }
