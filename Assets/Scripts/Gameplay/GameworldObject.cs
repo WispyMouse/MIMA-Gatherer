@@ -7,6 +7,9 @@ public class GameworldObject : MonoBehaviour
     [SerializeReference]
     private Unit GameworldUnitPF;
 
+    [SerializeReference]
+    private GameworldObjectEvent GameworldObjectSelectedEvent;
+
     [SerializeField]
     private ConfiguredStatistic<float> DistanceToSpawnUnit { get; set; } = new ConfiguredStatistic<float>(1f, $"{nameof(Structure)}.{nameof(DistanceToSpawnUnit)}");
 
@@ -32,7 +35,7 @@ public class GameworldObject : MonoBehaviour
 
     public virtual void Interact()
     {
-
+        GameworldObjectSelectedEvent.Raise(this);
     }
 
     public virtual void SpawnUnit(UnitSkeleton toSpawn)
@@ -46,7 +49,7 @@ public class GameworldObject : MonoBehaviour
         newUnit.StartOperations();
     }
 
-    public void AssignTaskToDo(TaskToDo task)
+    public virtual void AssignTaskToDo(TaskToDo task)
     {
         if (CurrentTask != null)
         {

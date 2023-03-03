@@ -49,6 +49,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameworldUnitPF: {fileID: 6976195979348214465}
+  GameworldObjectSelectedEvent: {fileID: 11400000, guid: d64c0c78c5da81646a4b982b3ac34cbe, type: 2}
+  UnitSelectedEvent: {fileID: 11400000, guid: 127d73a7a648de54e8a6d70c086a60ac, type: 2}
   _Agent: {fileID: 616595115639335596}
   AttachedRigidbody: {fileID: 1544117429268343248}
   ColorableModel: {fileID: 2109000722681671267}

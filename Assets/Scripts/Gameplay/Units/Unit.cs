@@ -7,6 +7,9 @@ public class Unit : GameworldObject
 {
     public const float CloseEnoughToResource = .15f;
 
+    [SerializeReference]
+    private UnitEvent UnitSelectedEvent;
+
     public UnitSkeleton UnitSkeletonData { get; private set; }
 
     [SerializeReference]
@@ -16,13 +19,14 @@ public class Unit : GameworldObject
 
     public Rigidbody AttachedRigidbody;
 
-    public ResourceCost HeldResources { get; private set; } = null;
-
     [SerializeReference]
     private MeshRenderer ColorableModel;
 
     [SerializeReference]
     private Transform ScalableModel;
+
+    public ResourceCost HeldResources { get; private set; } = null;
+    public Gatherable PreferredGatherable { get; set; } = null;
 
     public override string FriendlyName => UnitSkeletonData.FriendlyName;
     public override string DisplayName => UnitSkeletonData.UnitName;
@@ -37,6 +41,13 @@ public class Unit : GameworldObject
         {
             this.ColorableModel.material.color = parsedColor;
         }
+    }
+
+    public override void Interact()
+    {
+        base.Interact();
+
+        UnitSelectedEvent.Raise(this);
     }
 
     public void StartOperations()
@@ -134,7 +145,13 @@ public class Unit : GameworldObject
             }
             AddTaskToDo(new ReturnResourceTaskToDo(this, nearestStructure));
             AddTaskToDo(new MovementTaskToDo(this, nearestStructure.transform.position, foundPathToStructure));
+            return;
+        }
 
+        if (PreferredGatherable != null)
+        {
+            AddTaskToDo(new HarvestTaskToDo(this, PreferredGatherable));
+            AddTaskToDo(new MovementTaskToDo(this, PreferredGatherable.transform.position));
             return;
         }
 
@@ -145,6 +162,8 @@ public class Unit : GameworldObject
             Debug.Log("There are no resources, so what should I be doing?");
             return;
         }
+
+        PreferredGatherable = nearestGatherable;
 
         AddTaskToDo(new HarvestTaskToDo(this, nearestGatherable));
         AddTaskToDo(new MovementTaskToDo(this, nearestGatherable.transform.position, foundPathToGatherable));
@@ -163,5 +182,12 @@ public class Unit : GameworldObject
     protected override void ClearedTaskStack()
     {
         ActivateBrainCell();
+    }
+
+    public override void AssignTaskToDo(TaskToDo task)
+    {
+        PreferredGatherable = null;
+
+        base.AssignTaskToDo(task);
     }
 }

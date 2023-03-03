@@ -8,9 +8,9 @@
 			
 			"InventoryManagement.AdditionalCrystalCount": "0",
 			
-			"CameraConfigurations.CameraPanningMovementPerSecond": "10",
+			"CameraConfigurations.CameraPanningMovementPerSecond": "12",
 			
-			"CameraConfigurations.CameraXModifier": "0","CameraConfigurations.CameraYModifier": "30","CameraConfigurations.CameraZModifier": "-30",
+			"CameraConfigurations.CameraXModifier": "0","CameraConfigurations.CameraYModifier": "20","CameraConfigurations.CameraZModifier": "-20",
 			
 			"CameraConfigurations.CameraXRotation": "52.6","CameraConfigurations.CameraYRotation": "0","CameraConfigurations.CameraZRotation": "0",
 			

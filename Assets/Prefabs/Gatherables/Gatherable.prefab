@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameworldUnitPF: {fileID: 6976195979348214465, guid: a597808c289a8324786823fc39c9cdf0, type: 3}
+  GameworldObjectSelectedEvent: {fileID: 11400000, guid: d64c0c78c5da81646a4b982b3ac34cbe, type: 2}
   ColorableModel: {fileID: 1051669141607263999}
   ScalableModel: {fileID: 4072332683340273481}
 --- !u!54 &3641486040113261357

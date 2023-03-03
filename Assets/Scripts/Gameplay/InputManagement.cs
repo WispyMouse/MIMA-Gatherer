@@ -1,6 +1,8 @@
+using ScriptableObjectArchitecture;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// A globally accessible listener to inputs and delegates operations.
@@ -23,6 +25,9 @@ public class InputManagement : MonoBehaviour
     [SerializeReference]
     private UnitEvent UnitSelectedEvent;
 
+    [SerializeReference]
+    private GameEvent DismissEvent;
+
     private Unit SelectedUnit { get; set; }
 
     private HashSet<Directionality> CurrentInputDirectionalities { get; set; } = new HashSet<Directionality>();
@@ -39,6 +44,12 @@ public class InputManagement : MonoBehaviour
         // If we're clicking on a GameworlObject, interact with it
         if (Input.GetMouseButtonDown(0))
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
+
+            bool unitWasSelected = SelectedUnit != null;
             SelectedUnit = null;
 
             Ray clickRaycast = MainGameplayCamera.ScreenPointToRay(Input.mousePosition);
@@ -61,6 +72,11 @@ public class InputManagement : MonoBehaviour
                     break;
                 }
             }
+
+            if (SelectedUnit == null && unitWasSelected)
+            {
+                DismissEvent.Raise();
+            }
         }
     }
 
@@ -68,6 +84,12 @@ public class InputManagement : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
+            if (SelectedUnit == null)
+            {
+                DismissEvent.Raise();
+                return;
+            }
+
             Ray clickRaycast = MainGameplayCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit[] hits = Physics.RaycastAll(clickRaycast.origin, clickRaycast.direction, float.MaxValue, GroundLayerMask.value);
             foreach (RaycastHit hit in hits)
@@ -76,7 +98,7 @@ public class InputManagement : MonoBehaviour
                 
                 if (SelectedUnit != null)
                 {
-                    SelectedUnit.AddTaskToDo(new MovementTaskToDo(SelectedUnit, positionHit));
+                    SelectedUnit.AssignTaskToDo(new MovementTaskToDo(SelectedUnit, positionHit));
                 }
             }
         }

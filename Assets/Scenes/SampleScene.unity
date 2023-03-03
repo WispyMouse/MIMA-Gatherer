@@ -1420,6 +1420,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   UnitSelectedEvent: {fileID: 11400000, guid: 127d73a7a648de54e8a6d70c086a60ac, type: 2}
+  DismissEvent: {fileID: 11400000, guid: a7c2d2e18cd34bc48ab84c6b45f40d8e, type: 2}
 --- !u!4 &1183337439
 Transform:
   m_ObjectHideFlags: 0
@@ -1522,6 +1523,7 @@ GameObject:
   - component: {fileID: 1226715697}
   - component: {fileID: 1226715698}
   - component: {fileID: 1226715699}
+  - component: {fileID: 1226715700}
   m_Layer: 5
   m_Name: Contextual Actions Panel
   m_TagString: Untagged
@@ -1599,6 +1601,40 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _debugValue: {fileID: 0}
+--- !u!114 &1226715700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226715696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5758ca93461aeeb4589456a052b07d74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DeveloperDescription:
+    _value: 
+  _showDebugFields: 0
+  _enableGizmoDebugging: 1
+  _debugColor: {r: 0, g: 1, b: 1, a: 1}
+  _previouslyRegisteredEvent: {fileID: 11400000, guid: a7c2d2e18cd34bc48ab84c6b45f40d8e, type: 2}
+  _event: {fileID: 11400000, guid: a7c2d2e18cd34bc48ab84c6b45f40d8e, type: 2}
+  _response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1226715698}
+        m_TargetAssemblyTypeName: ContextActionUI, Scripts
+        m_MethodName: OnDismiss
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1341404608
 GameObject:
   m_ObjectHideFlags: 0
@@ -1933,7 +1969,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BuildThingButtonPF: {fileID: 6685304890286374514, guid: 273da338e4347bc4db406a35791a91b2, type: 3}
-  BuildThingHolder: {fileID: 0}
+  BuildThingHolder: {fileID: 1953753445}
 --- !u!1 &1909475742
 GameObject:
   m_ObjectHideFlags: 0
@@ -1945,8 +1981,9 @@ GameObject:
   - component: {fileID: 1909475743}
   - component: {fileID: 1909475745}
   - component: {fileID: 1909475747}
-  - component: {fileID: 1909475746}
   - component: {fileID: 1909475748}
+  - component: {fileID: 1909475749}
+  - component: {fileID: 1909475750}
   m_Layer: 5
   m_Name: Selected Gameworld Object Panel
   m_TagString: Untagged
@@ -1983,41 +2020,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1909475742}
   m_CullTransparentMesh: 1
---- !u!114 &1909475746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1909475742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1c90a7485f70a747baccd7da651fb9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DeveloperDescription:
-    _value: 
-  _showDebugFields: 0
-  _enableGizmoDebugging: 1
-  _debugColor: {r: 0, g: 1, b: 1, a: 1}
-  _previouslyRegisteredEvent: {fileID: 0}
-  _event: {fileID: 11400000, guid: 127d73a7a648de54e8a6d70c086a60ac, type: 2}
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1909475747}
-        m_TargetAssemblyTypeName: SelectedUnitPanel, Scripts
-        m_MethodName: OnUnitSelected
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _debugValue: {fileID: 0}
 --- !u!114 &1909475747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2052,6 +2054,75 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1909475749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909475742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 401e14918f197f74d9218cab41f21b90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DeveloperDescription:
+    _value: 
+  _showDebugFields: 0
+  _enableGizmoDebugging: 1
+  _debugColor: {r: 0, g: 1, b: 1, a: 1}
+  _previouslyRegisteredEvent: {fileID: 0}
+  _event: {fileID: 11400000, guid: d64c0c78c5da81646a4b982b3ac34cbe, type: 2}
+  _response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1909475747}
+        m_TargetAssemblyTypeName: SelectedGameworldObjectPanel, Scripts
+        m_MethodName: OnGameworldObjectSelected
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _debugValue: {fileID: 0}
+--- !u!114 &1909475750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909475742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5758ca93461aeeb4589456a052b07d74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DeveloperDescription:
+    _value: 
+  _showDebugFields: 0
+  _enableGizmoDebugging: 1
+  _debugColor: {r: 0, g: 1, b: 1, a: 1}
+  _previouslyRegisteredEvent: {fileID: 11400000, guid: a7c2d2e18cd34bc48ab84c6b45f40d8e, type: 2}
+  _event: {fileID: 11400000, guid: a7c2d2e18cd34bc48ab84c6b45f40d8e, type: 2}
+  _response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1909475747}
+        m_TargetAssemblyTypeName: SelectedGameworldObjectPanel, Scripts
+        m_MethodName: OnDismiss
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1953753444
 GameObject:
   m_ObjectHideFlags: 0
@@ -2090,7 +2161,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 5, y: -5}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 300, y: 0}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1953753446
 MonoBehaviour:
@@ -2142,7 +2213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
+  m_HorizontalFit: 0
   m_VerticalFit: 2
 --- !u!114 &1953753449
 MonoBehaviour:
