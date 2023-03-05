@@ -103,4 +103,9 @@ public class TaskToDo
 
         this.RepresentingTimer?.Dismiss();
     }
+
+    public virtual string TaskDetails()
+    {
+        return string.Empty;
+    }
 }

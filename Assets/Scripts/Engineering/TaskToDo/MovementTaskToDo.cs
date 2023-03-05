@@ -14,6 +14,15 @@ public class MovementTaskToDo : TaskToDo
     private NavMeshPath Navigation { get; set; }
     private int CurCornerIndex { get; set; }
 
+    private ConfiguredStatistic<float> DurationBeforeSheeping { get; set; } = new ConfiguredStatistic<float>(.2f, $"{nameof(MovementTaskToDo)}.{nameof(DurationBeforeSheeping)}");
+    private ConfiguredStatistic<float> DistanceThresholdForSheeping { get; set; } = new ConfiguredStatistic<float>(.2f, $"{nameof(MovementTaskToDo)}.{nameof(DistanceThresholdForSheeping)}");
+    private ConfiguredStatistic<float> MaximumTimeToSheep { get; set; } = new ConfiguredStatistic<float>(.2f, $"{nameof(MovementTaskToDo)}.{nameof(MaximumTimeToSheep)}");
+    private float TimeLeftForCurrentSheeping { get; set; } = 0;
+    private bool IsSheeping { get; set; } = false;
+    private float TimeSinceLastPastThresholdMovement { get; set; } = 0;
+    private Vector3 RandomDirectionToWalk { get; set; }
+    private Vector3 LastFramePosition { get; set; }
+
     public MovementTaskToDo(Unit performingObject, Vector3 destination) : base(performingObject, $"Moving to {destination.ToString()}")
     {
         this.Destination = destination;
@@ -44,6 +53,7 @@ public class MovementTaskToDo : TaskToDo
         }
 
         Navigation = pathToNearestThing;
+        LastFramePosition = PerformingObjectAsUnit.transform.position;
     }
 
     public override void Tick(float deltaTime)
@@ -53,7 +63,36 @@ public class MovementTaskToDo : TaskToDo
             return;
         }
 
+        if (Vector3.Distance(PerformingObjectAsUnit.transform.position, LastFramePosition) <= DistanceThresholdForSheeping.Value * Time.deltaTime)
+        {
+            TimeSinceLastPastThresholdMovement += deltaTime;
+
+            if (TimeSinceLastPastThresholdMovement > DurationBeforeSheeping.Value)
+            {
+                IsSheeping = true;
+                Vector3 randomPosition = UnityEngine.Random.onUnitSphere;
+                RandomDirectionToWalk = new Vector3(randomPosition.x, 0, randomPosition.z).normalized;
+                TimeLeftForCurrentSheeping = UnityEngine.Random.Range(0, MaximumTimeToSheep.Value);
+            }
+        }
+        else
+        {
+            TimeSinceLastPastThresholdMovement = 0;
+        }
+
+        if (IsSheeping)
+        {
+            PerformingObjectAsUnit.AttachedRigidbody.MovePosition(PerformingObjectAsUnit.transform.position + RandomDirectionToWalk * deltaTime);
+            TimeLeftForCurrentSheeping -= deltaTime;
+            if (TimeLeftForCurrentSheeping <= 0)
+            {
+                IsSheeping = false;
+            }
+            return;
+        }
+
         float movementAllowed = deltaTime * PerformingObjectAsUnit.UnitSkeletonData.MovementPerSecond;
+        float actualDistanceTraveled = 0;
         while (movementAllowed > 0)
         {
             if (Navigation == null)
@@ -62,34 +101,35 @@ public class MovementTaskToDo : TaskToDo
                 break;
             }
 
-            movementAllowed = FollowPathToNextCorner(movementAllowed);
+            FollowPathToNextCorner(ref movementAllowed);
         }
+
+        LastFramePosition = PerformingObjectAsUnit.transform.position;
     }
 
-    /// <summary>
-    /// Instructs the Unit to move down the path it's on.
-    /// </summary>
-    /// <param name="maxDistance">The maximum amount of distance that can be covered. If the distance to the next corner is less than this, will only go to the next available corner.</param>
-    /// <returns>The amount of space left after reaching the farthest point that could be reached, or after reaching the next corner.</returns>
-    float FollowPathToNextCorner(float maxDistance)
+    void FollowPathToNextCorner(ref float movementAllowed)
     {
         if (Navigation == null)
         {
-            return -1f;
+            movementAllowed = -1f;
+            return;
         }
 
         if (CurCornerIndex < 0)
         {
-            return -1f;
+            movementAllowed = -1f;
+            return;
         }
 
         if (CurCornerIndex >= Navigation.corners.Length)
         {
-            return -1f;
+            movementAllowed = -1f;
+            return;
         }
 
+        Vector3 startingPosition = PerformingObjectAsUnit.transform.position;
         Vector3 targetPosition = Navigation.corners[CurCornerIndex];
-        Vector3 calculatedNewPosition = Vector3.MoveTowards(PerformingObjectAsUnit.transform.position, targetPosition, maxDistance);
+        Vector3 calculatedNewPosition = Vector3.MoveTowards(PerformingObjectAsUnit.transform.position, targetPosition, movementAllowed);
 
         float distanceToCorner = Vector3.Distance(PerformingObjectAsUnit.transform.position, targetPosition);
 
@@ -104,7 +144,13 @@ public class MovementTaskToDo : TaskToDo
             }
         }
 
-        return Mathf.Max(0, maxDistance - distanceToCorner);
+        movementAllowed = Mathf.Max(0, movementAllowed - distanceToCorner);
     }
 
+    public override string TaskDetails()
+    {
+        return String.Concat(base.TaskDetails(),
+            $"{(IsSheeping ? "Sheeping...\n" : "")}",
+            $"{(PerformingObjectAsUnit.HeldResources != null ? $"Carrying {PerformingObjectAsUnit.HeldResources.Cost} of {PerformingObjectAsUnit.HeldResources.Resource}\n" : "")}");
+    }
 }

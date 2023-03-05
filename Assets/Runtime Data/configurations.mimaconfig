@@ -34,6 +34,10 @@
 			"HarvestTaskToDo.Scale": "1",
 			"HarvestTaskToDo.TimerFrontColor": "#0000FF",
 			
-			"ReturnResourceTaskToDo.ShowTimer": "false"
+			"ReturnResourceTaskToDo.ShowTimer": "false",
+			
+			"MovementTaskToDo.DurationBeforeSheeping": ".15",
+			"MovementTaskToDo.DistanceThresholdForSheeping": ".2",
+			"MovementTaskToDo.MaximumTimeToSheep": ".1"
 		}
 }

@@ -54,11 +54,11 @@
 	"StartingInventory": [
 		{
 			"ResourceName": "wood",
-			"Amount": "50"
+			"Amount": "5000"
 		},
 		{
 			"ResourceName": "stone",
-			"Amount": "15"
+			"Amount": "1500"
 		}
 	]
 }
