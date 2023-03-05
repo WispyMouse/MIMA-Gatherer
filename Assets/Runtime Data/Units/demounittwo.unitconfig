@@ -3,11 +3,11 @@
 	"FriendlyName" : "demounittwo",
 	"Costs": [
 		{
-			"Resource": "Wood",
+			"Resource": "wood",
 			"Cost": 75
 		},
 		{
-			"Resource": "Stone",
+			"Resource": "stone",
 			"Cost": 75
 		}
 	],

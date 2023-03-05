@@ -21,21 +21,21 @@ public class MapLoader : MonoBehaviour
         foreach (StartingGatherable sr in map.ResourceNodes)
         {
             Gatherable newResource = Instantiate(GatherablePrefab, sr.Position, Quaternion.identity);
-            newResource.AssignGatherableSkeleton(ConfigurationManagement.GatherableSkeletons[sr.FriendlyName]);
+            newResource.AssignGatherableSkeleton(ConfigurationManagement.GatherableSkeletons[sr.FriendlyName.ToLower()]);
             SpawnedObjects.Add(newResource);
         }
 
         foreach (StartingStructure ss in map.Structures)
         {
             Structure structure = Instantiate(StructurePrefab, ss.Position, Quaternion.identity);
-            structure.AssignStructureSkeleton(ConfigurationManagement.StructureSkeletons[ss.FriendlyName]);
+            structure.AssignStructureSkeleton(ConfigurationManagement.StructureSkeletons[ss.FriendlyName.ToLower()]);
             SpawnedObjects.Add(structure);
         }
 
         foreach (StartingUnit su in map.Units)
         {
             Unit unit = Instantiate(UnitPrefab, su.Position, Quaternion.identity);
-            unit.AssignUnitSkeleton(ConfigurationManagement.UnitSkeletons[su.FriendlyName]);
+            unit.AssignUnitSkeleton(ConfigurationManagement.UnitSkeletons[su.FriendlyName.ToLower()]);
             SpawnedObjects.Add(unit);
         }
     }

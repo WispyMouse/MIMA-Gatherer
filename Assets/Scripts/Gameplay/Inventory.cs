@@ -16,7 +16,7 @@ public class Inventory
 
         if (!ResourceNamesToCounters.TryGetValue(gatherableName, out counter))
         {
-            counter = new InventoryCounter(0, ConfigurationManagement.GatherableSkeletons[gatherableName]);
+            counter = new InventoryCounter(0, ConfigurationManagement.GatherableSkeletons[gatherableName.ToLower()]);
             ResourceNamesToCounters.Add(gatherableName, counter);
         }
 
