@@ -1,0 +1,21 @@
+{
+	"StructureName": "Water Collector",
+	"FriendlyName" : "watercollector",
+	"Costs": [
+		{
+			"Resource": "Wood",
+			"Cost": 25
+		},
+		{
+			"Resource": "Stone",
+			"Cost": 25
+		}
+	],
+	"ProductionTimeSeconds": 2.5,
+	"ModelColor": "#0000FF",
+	"ModelScale": .8,
+	
+	"AcceptedResources": [
+		"water"
+	]
+}

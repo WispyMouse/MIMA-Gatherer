@@ -22,4 +22,5 @@ public class StructureSkeleton
     public float ModelScale;
 
     public List<string> AcceptedResources;
+    public List<string> ProducedUnits;
 }

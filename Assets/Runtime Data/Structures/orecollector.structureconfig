@@ -1,0 +1,21 @@
+{
+	"StructureName": "Ore Collector",
+	"FriendlyName" : "orecollector",
+	"Costs": [
+		{
+			"Resource": "Wood",
+			"Cost": 50
+		},
+		{
+			"Resource": "Stone",
+			"Cost": 50
+		}
+	],
+	"ProductionTimeSeconds": 2.5,
+	"ModelColor": "#AAAAAA",
+	"ModelScale": 1,
+	
+	"AcceptedResources": [
+		"ore"
+	]
+}

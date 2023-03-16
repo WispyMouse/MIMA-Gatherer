@@ -12,6 +12,13 @@
 	"ModelScale": 1,
 	
 	"AcceptedResources": [
-		"wood"
+		"wood",
+		"stone",
+		"water",
+		"ore"
+	],
+	"ProducedUnits": [
+		"demounitone",
+		"demounittwo"
 	]
 }

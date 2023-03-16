@@ -1,0 +1,17 @@
+{
+	"StructureName": "Stone Collector",
+	"FriendlyName" : "stonecollector",
+	"Costs": [
+		{
+			"Resource": "Wood",
+			"Cost": 40
+		}
+	],
+	"ProductionTimeSeconds": 5.5,
+	"ModelColor": "#AA6666",
+	"ModelScale": 1,
+	
+	"AcceptedResources": [
+		"stone"
+	]
+}

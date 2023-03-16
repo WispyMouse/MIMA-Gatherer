@@ -118,6 +118,11 @@ public class Unit : GameworldObject
                 continue;
             }
 
+            if (target.IsPlan)
+            {
+                continue;
+            }
+
             if (target.StructureSkeletonData.AcceptedResources.Contains(HeldResources.Resource))
             {
                 consideredStructures.Add(target);
@@ -137,7 +142,7 @@ public class Unit : GameworldObject
         if (HeldResources != null)
         {
             NavMeshPath foundPathToStructure = null;
-            Structure nearestStructure = GetNearestObject<Structure>(out foundPathToStructure);
+            Structure nearestStructure = GetNearestStructureThatAcceptsHeldResource(out foundPathToStructure);
             if (nearestStructure == null)
             {
                 Debug.Log("There are no structures, so where should I return this?");

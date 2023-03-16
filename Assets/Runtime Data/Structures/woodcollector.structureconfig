@@ -1,0 +1,17 @@
+{
+	"StructureName": "Wood Collector",
+	"FriendlyName" : "woodcollector",
+	"Costs": [
+		{
+			"Resource": "Wood",
+			"Cost": 75
+		}
+	],
+	"ProductionTimeSeconds": 2.5,
+	"ModelColor": "#FFA000",
+	"ModelScale": 1,
+	
+	"AcceptedResources": [
+		"wood"
+	]
+}

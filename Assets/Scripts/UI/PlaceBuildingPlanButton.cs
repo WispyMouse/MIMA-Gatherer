@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class BuildThingButton : UIBehaviour
+public class PlaceBuildingPlanButton : UIBehaviour
 {
     [SerializeReference]
     private TMP_Text Text;
@@ -16,14 +16,17 @@ public class BuildThingButton : UIBehaviour
     [SerializeReference]
     private Transform ResourceCostParent;
 
-    private ConstructUnitAction Construction { get; set; }
+    private StructureSkeleton Skeleton { get; set; }
 
-    public void SetBuildTarget(ConstructUnitAction constructUnitAction)
+    [SerializeReference]
+    private StructureSkeletonEvent PlaceStructureEvent;
+
+    public void SetBuildTarget(StructureSkeleton skeleton)
     {
-        Construction = constructUnitAction;
-        Text.text = constructUnitAction.UnitToConstruct.UnitName;
+        Skeleton = skeleton;
+        Text.text = skeleton.StructureName;
 
-        foreach (ResourceCost cost in constructUnitAction.UnitToConstruct.Costs)
+        foreach (ResourceCost cost in skeleton.Costs)
         {
             ResourceLabel label = Instantiate(ResourceCostPrefab, ResourceCostParent);
             label.SetResourceCost(cost);
@@ -32,7 +35,6 @@ public class BuildThingButton : UIBehaviour
 
     public void OnClick()
     {
-        SpawnUnitTaskToDo newTask = new SpawnUnitTaskToDo(Construction.ObjectThatConstructs, Construction);
-        Construction.ObjectThatConstructs.AddTaskToDo(newTask);
+        PlaceStructureEvent.Raise(Skeleton);
     }
 }

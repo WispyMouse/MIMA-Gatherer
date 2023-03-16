@@ -19,6 +19,8 @@ public class Structure : GameworldObject
     public override string FriendlyName => StructureSkeletonData.FriendlyName;
     public override string DisplayName => StructureSkeletonData.StructureName;
 
+    public bool IsPlan { get; set; } = false;
+
     public void AssignStructureSkeleton(StructureSkeleton data)
     {
         this.StructureSkeletonData = data;
@@ -41,5 +43,15 @@ public class Structure : GameworldObject
         base.Interact();
 
         StructureSelectedEvent.Raise(this);
+    }
+
+    public void SetIsPossiblePlan()
+    {
+        IsPlan = true;
+    }
+
+    public void StartThePlan()
+    {
+
     }
 }
