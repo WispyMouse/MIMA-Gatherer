@@ -11,6 +11,8 @@ public class ContextActionUI : MonoBehaviour
     BuildThingButton BuildThingButtonPF;
     [SerializeReference]
     PlaceBuildingPlanButton PlaceBuildPlanButtonPF;
+    [SerializeField]
+    Button GenericButtonPF;
 
     [SerializeReference]
     Transform BuildThingHolder;
@@ -20,9 +22,15 @@ public class ContextActionUI : MonoBehaviour
         ClearButtons();
         SelectedStructure = selected;
 
+        if (SelectedStructure.IsPlan)
+        {
+            ShowPlanUI(SelectedStructure);
+            return;
+        }
+
         foreach (UnitSkeleton curSkeleton in ConfigurationManagement.UnitSkeletons.Values)
         {
-            if (selected.StructureSkeletonData.ProducedUnits.Contains(curSkeleton.FriendlyName))
+            if (!selected.StructureSkeletonData.ProducedUnits.Contains(curSkeleton.FriendlyName))
             {
                 // Can't make this unit!
                 continue;
@@ -58,6 +66,29 @@ public class ContextActionUI : MonoBehaviour
             PlaceBuildingPlanButton newButton = Instantiate(PlaceBuildPlanButtonPF, BuildThingHolder);
             newButton.SetBuildTarget(curSkeleton);
             ActiveButtons.Add(newButton);
+        }
+    }
+
+    void ShowPlanUI(Structure structure)
+    {
+        ClearButtons();
+
+        Button addButton = Instantiate(GenericButtonPF, BuildThingHolder);
+        addButton.GetComponentInChildren<TMPro.TMP_Text>().text = "Add Worker";
+        addButton.onClick.AddListener(() => { structure.WorkersDesired++; });
+        ActiveButtons.Add(addButton);
+
+        Button removeButton = Instantiate(GenericButtonPF, BuildThingHolder);
+        removeButton.GetComponentInChildren<TMPro.TMP_Text>().text = "Remove Worker";
+        removeButton.onClick.AddListener(() => { structure.WorkersDesired = Mathf.Max(0, structure.WorkersDesired); });
+        ActiveButtons.Add(removeButton);
+    }
+
+    public void OnStructurePlanBuildFinished(Structure finished)
+    {
+        if (SelectedStructure == finished)
+        {
+            OnStructureSelected(finished);
         }
     }
 }

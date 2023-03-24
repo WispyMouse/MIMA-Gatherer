@@ -27,6 +27,7 @@ public class Unit : GameworldObject
 
     public ResourceCost HeldResources { get; private set; } = null;
     public Gatherable PreferredGatherable { get; set; } = null;
+    private Structure ContributingToStructurePlan { get; set; }
 
     public override string FriendlyName => UnitSkeletonData.FriendlyName;
     public override string DisplayName => UnitSkeletonData.UnitName;
@@ -55,13 +56,13 @@ public class Unit : GameworldObject
         ActivateBrainCell();
     }
 
-    T GetNearestObject<T>(out NavMeshPath pathToResource) where T : GameworldObject
+    public T GetNearestObject<T>(out NavMeshPath pathToResource) where T : GameworldObject
     {
         T[] allTargets = GameObject.FindObjectsOfType<T>();
         return GetNearestObject<T>(out pathToResource, new List<T>(allTargets));
     }
 
-    T GetNearestObject<T>(out NavMeshPath pathToResource, List<T> consideredResources) where T : GameworldObject
+    public T GetNearestObject<T>(out NavMeshPath pathToResource, List<T> consideredResources) where T : GameworldObject
     {
         pathToResource = null;
         if (consideredResources.Count == 0)
@@ -106,7 +107,7 @@ public class Unit : GameworldObject
         return closestTarget;
     }
 
-    Structure GetNearestStructureThatAcceptsHeldResource(out NavMeshPath pathToResource)
+    public Structure GetNearestStructureThatAcceptsHeldResource(out NavMeshPath pathToResource)
     {
         Structure[] allTargets = GameObject.FindObjectsOfType<Structure>();
         List<Structure> consideredStructures = new List<Structure>();
@@ -132,6 +133,33 @@ public class Unit : GameworldObject
         return GetNearestObject<Structure>(out pathToResource, consideredStructures);
     }
 
+    Structure GetNearestStructurePlanThatDesiresWorkers(out NavMeshPath pathToResource)
+    {
+        Structure[] allTargets = GameObject.FindObjectsOfType<Structure>();
+        List<Structure> consideredStructures = new List<Structure>();
+
+        foreach (Structure target in allTargets)
+        {
+            if (!target.IsPlan)
+            {
+                continue;
+            }
+
+            if (!target.PlanIsReadyForWork)
+            {
+                continue;
+            }
+
+            if (target.WorkersAssigned < target.WorkersDesired)
+            {
+                consideredStructures.Add(target);
+            }
+        }
+
+        return GetNearestObject<Structure>(out pathToResource, consideredStructures);
+    }
+
+
     public void ActivateBrainCell()
     {
         if (CurrentTask != null)
@@ -139,27 +167,32 @@ public class Unit : GameworldObject
             return;
         }
 
+        // If I am holding a resource, bring it to a facility that can receive it
         if (HeldResources != null)
         {
-            NavMeshPath foundPathToStructure = null;
-            Structure nearestStructure = GetNearestStructureThatAcceptsHeldResource(out foundPathToStructure);
-            if (nearestStructure == null)
-            {
-                Debug.Log("There are no structures, so where should I return this?");
-                return;
-            }
-            AddTaskToDo(new ReturnResourceTaskToDo(this, nearestStructure));
-            AddTaskToDo(new MovementTaskToDo(this, nearestStructure.transform.position, foundPathToStructure));
+            AddTaskToDo(new ReturnResourceTaskToDo(this));
             return;
         }
 
+        // If there is a Structure Plan that has open Desired Workers slots, assign myself to it
+        NavMeshPath foundPathToPlan = null;
+        Structure closestPlan = GetNearestStructurePlanThatDesiresWorkers(out foundPathToPlan);
+        if (closestPlan != null)
+        {
+            ContributingToStructurePlan = closestPlan;
+            closestPlan.WorkersAssigned++;
+            AddTaskToDo(new ContributeToPlanTaskToDo(this, closestPlan));
+            return;
+        }
+
+        // If I have a preferred resource node to gather from, go gather from it
         if (PreferredGatherable != null)
         {
             AddTaskToDo(new HarvestTaskToDo(this, PreferredGatherable));
-            AddTaskToDo(new MovementTaskToDo(this, PreferredGatherable.transform.position));
             return;
         }
 
+        // If there is a gatherable in the world somewhere, go gather from it
         NavMeshPath foundPathToGatherable = null;
         Gatherable nearestGatherable = GetNearestObject<Gatherable>(out foundPathToGatherable);
         if (nearestGatherable == null)
@@ -170,8 +203,7 @@ public class Unit : GameworldObject
 
         PreferredGatherable = nearestGatherable;
 
-        AddTaskToDo(new HarvestTaskToDo(this, nearestGatherable));
-        AddTaskToDo(new MovementTaskToDo(this, nearestGatherable.transform.position, foundPathToGatherable));
+        AddTaskToDo(new HarvestTaskToDo(this, nearestGatherable, foundPathToGatherable));
     }
 
     public void StartHoldingResources(string resourceName, int amount)
@@ -192,6 +224,12 @@ public class Unit : GameworldObject
     public override void AssignTaskToDo(TaskToDo task)
     {
         PreferredGatherable = null;
+
+        if (ContributingToStructurePlan != null)
+        {
+            ContributingToStructurePlan.WorkersAssigned--;
+            ContributingToStructurePlan = null;
+        }
 
         base.AssignTaskToDo(task);
     }

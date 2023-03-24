@@ -108,4 +108,9 @@ public class TaskToDo
     {
         return string.Empty;
     }
+
+    public virtual bool ConsiderAndPushPrerequisiteTasks()
+    {
+        return false;
+    }
 }

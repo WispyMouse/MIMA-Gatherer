@@ -1292,7 +1292,7 @@ MonoBehaviour:
   _showDebugFields: 0
   _enableGizmoDebugging: 1
   _debugColor: {r: 0, g: 1, b: 1, a: 1}
-  _previouslyRegisteredEvent: {fileID: 0}
+  _previouslyRegisteredEvent: {fileID: 11400000, guid: a7c2d2e18cd34bc48ab84c6b45f40d8e, type: 2}
   _event: {fileID: 11400000, guid: a7c2d2e18cd34bc48ab84c6b45f40d8e, type: 2}
   _response:
     m_PersistentCalls:
@@ -1956,6 +1956,7 @@ GameObject:
   - component: {fileID: 1226715699}
   - component: {fileID: 1226715700}
   - component: {fileID: 1226715701}
+  - component: {fileID: 1226715702}
   m_Layer: 5
   m_Name: Contextual Actions Panel
   m_TagString: Untagged
@@ -1998,6 +1999,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BuildThingButtonPF: {fileID: 6685304890286374514, guid: 273da338e4347bc4db406a35791a91b2, type: 3}
   PlaceBuildPlanButtonPF: {fileID: 7622699954127308922, guid: 22134cb6477f00c4b8e4408153e1558b, type: 3}
+  GenericButtonPF: {fileID: 6493109341744459078, guid: 709f63c5dd4013640889a3bdafb3e7f9, type: 3}
   BuildThingHolder: {fileID: 1953753445}
 --- !u!114 &1226715699
 MonoBehaviour:
@@ -2102,6 +2104,41 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1226715702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226715696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a7b9f0a534abd2459116da8e4dd5928, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DeveloperDescription:
+    _value: 
+  _showDebugFields: 0
+  _enableGizmoDebugging: 1
+  _debugColor: {r: 0, g: 1, b: 1, a: 1}
+  _previouslyRegisteredEvent: {fileID: 0}
+  _event: {fileID: 11400000, guid: a4d5e1998b14cfc409cba55b9a429fd7, type: 2}
+  _response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1226715698}
+        m_TargetAssemblyTypeName: ContextActionUI, Scripts
+        m_MethodName: OnStructurePlanBuildFinished
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _debugValue: {fileID: 0}
 --- !u!1 &1341404608
 GameObject:
   m_ObjectHideFlags: 0
@@ -2351,7 +2388,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1857584727}
-  - component: {fileID: 1857584730}
   - component: {fileID: 1857584729}
   - component: {fileID: 1857584728}
   m_Layer: 5
@@ -2423,21 +2459,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &1857584730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1857584726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9157854569f036548854497bb40b3dea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BuildThingButtonPF: {fileID: 6685304890286374514, guid: 273da338e4347bc4db406a35791a91b2, type: 3}
-  PlaceBuildPlanButtonPF: {fileID: 0}
-  BuildThingHolder: {fileID: 1953753445}
 --- !u!1 &1909475742
 GameObject:
   m_ObjectHideFlags: 0

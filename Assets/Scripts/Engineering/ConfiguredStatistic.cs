@@ -58,4 +58,10 @@ public class ConfiguredStatistic<T>
 
         ValueLoaded = true;
     }
+
+    public static T GetValue(string path)
+    {
+        ConfiguredStatistic<T> value = new ConfiguredStatistic<T>(default(T), path);
+        return value.Value;
+    }
 }

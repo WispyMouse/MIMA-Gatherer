@@ -33,9 +33,13 @@
 			"HarvestTaskToDo.DistanceAboveTaskPerformer": "4",
 			"HarvestTaskToDo.Scale": "1",
 			"HarvestTaskToDo.TimerFrontColor": "#0000FF",
+			"HarvestTaskToDo.AcceptableDistanceToTask": "1.5",
 			
 			"ReturnResourceTaskToDo.ShowTimer": "false",
-			
+			"ReturnResourceTaskToDo.AcceptableDistanceToTask": "2",
+			"BringResourceToPlanTaskToDo.AcceptableDistanceToTask": "2",
+			"GetResourcesFromStructureTaskToDo.AcceptableDistanceToTask": "2",
+			"ContributeToPlanTaskToDo.AcceptableDistanceToTask": "2",
 			"MovementTaskToDo.DurationBeforeSheeping": ".15",
 			"MovementTaskToDo.DistanceThresholdForSheeping": ".2",
 			"MovementTaskToDo.MaximumTimeToSheep": ".1"

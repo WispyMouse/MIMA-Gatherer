@@ -49,6 +49,7 @@ MonoBehaviour:
   GameworldUnitPF: {fileID: 6976195979348214465, guid: a597808c289a8324786823fc39c9cdf0, type: 3}
   GameworldObjectSelectedEvent: {fileID: 11400000, guid: d64c0c78c5da81646a4b982b3ac34cbe, type: 2}
   StructureSelectedEvent: {fileID: 11400000, guid: eaaffd7a66995c448973ab2f7a805173, type: 2}
+  StructureFinishedPlanEvent: {fileID: 11400000, guid: a4d5e1998b14cfc409cba55b9a429fd7, type: 2}
   ColorableModel: {fileID: 916697148026707596}
   ScalableModel: {fileID: 6807366879163644394}
 --- !u!54 &4025046860319859415

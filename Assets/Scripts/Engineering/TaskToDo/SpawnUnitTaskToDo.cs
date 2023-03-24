@@ -14,7 +14,6 @@ public class SpawnUnitTaskToDo : TaskToDo
     public override void ProcessAndCalculate()
     {
         base.ProcessAndCalculate();
-
         if (!ConstructUnit.PayCosts())
         {
             this.RejectAsNotPossible();

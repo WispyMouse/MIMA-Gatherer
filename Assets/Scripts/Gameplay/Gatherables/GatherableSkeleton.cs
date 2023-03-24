@@ -19,4 +19,5 @@ public class GatherableSkeleton
 
     public float TimeToGatherResource;
     public int AmountOfResourcesGathered;
+    public int GatherForBuildingAmount;
 }

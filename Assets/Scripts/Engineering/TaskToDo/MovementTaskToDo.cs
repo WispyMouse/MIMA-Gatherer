@@ -22,16 +22,32 @@ public class MovementTaskToDo : TaskToDo
     private float TimeSinceLastPastThresholdMovement { get; set; } = 0;
     private Vector3 RandomDirectionToWalk { get; set; }
     private Vector3 LastFramePosition { get; set; }
+    private float DistanceToTaskToFinish { get; set; }
 
     public MovementTaskToDo(Unit performingObject, Vector3 destination) : base(performingObject, $"Moving to {destination.ToString()}")
     {
         this.Destination = destination;
         this.PerformingObjectAsUnit = performingObject;
+        this.DistanceToTaskToFinish = CloseEnoughToCorner;
     }
 
     public MovementTaskToDo(Unit performingObject, Vector3 destination, NavMeshPath calculatedPath) : this(performingObject, destination)
     {
+        this.DistanceToTaskToFinish = CloseEnoughToCorner;
         this.Navigation = calculatedPath;
+    }
+
+    public MovementTaskToDo(Unit performingObject, Vector3 destination, float distanceToTaskToFinish) : base(performingObject, $"Moving to {destination.ToString()}")
+    {
+        this.Destination = destination;
+        this.PerformingObjectAsUnit = performingObject;
+        this.DistanceToTaskToFinish = distanceToTaskToFinish;
+    }
+
+    public MovementTaskToDo(Unit performingObject, Vector3 destination, NavMeshPath calculatedPath, float distanceToTaskToFinish) : this(performingObject, destination)
+    {
+        this.Navigation = calculatedPath;
+        this.DistanceToTaskToFinish = distanceToTaskToFinish;
     }
 
     public override void ProcessAndCalculate()
@@ -54,12 +70,14 @@ public class MovementTaskToDo : TaskToDo
 
         Navigation = pathToNearestThing;
         LastFramePosition = PerformingObjectAsUnit.transform.position;
+        return;
     }
 
     public override void Tick(float deltaTime)
     {
         if (Navigation == null)
         {
+            TaskCompleted();
             return;
         }
 
@@ -92,7 +110,6 @@ public class MovementTaskToDo : TaskToDo
         }
 
         float movementAllowed = deltaTime * PerformingObjectAsUnit.UnitSkeletonData.MovementPerSecond;
-        float actualDistanceTraveled = 0;
         while (movementAllowed > 0)
         {
             if (Navigation == null)
@@ -111,23 +128,25 @@ public class MovementTaskToDo : TaskToDo
     {
         if (Navigation == null)
         {
+            Debug.Log("No navigation, no job");
             movementAllowed = -1f;
             return;
         }
 
         if (CurCornerIndex < 0)
         {
+            Debug.Log("CurCornerIndex is negative");
             movementAllowed = -1f;
             return;
         }
 
         if (CurCornerIndex >= Navigation.corners.Length)
         {
+            Debug.Log("Index is beyond corners length");
             movementAllowed = -1f;
             return;
         }
 
-        Vector3 startingPosition = PerformingObjectAsUnit.transform.position;
         Vector3 targetPosition = Navigation.corners[CurCornerIndex];
         Vector3 calculatedNewPosition = Vector3.MoveTowards(PerformingObjectAsUnit.transform.position, targetPosition, movementAllowed);
 
@@ -135,7 +154,10 @@ public class MovementTaskToDo : TaskToDo
 
         PerformingObjectAsUnit.AttachedRigidbody.MovePosition(calculatedNewPosition);
 
-        if (Vector3.Distance(PerformingObjectAsUnit.transform.position, targetPosition) < CloseEnoughToCorner)
+        float newDistanceToCorner = Vector3.Distance(PerformingObjectAsUnit.transform.position, targetPosition);
+        float distanceThreshold = (Navigation.corners.Length - CurCornerIndex > 1) ? CloseEnoughToCorner : DistanceToTaskToFinish; 
+
+        if (newDistanceToCorner < distanceThreshold)
         {
             CurCornerIndex++;
             if (Navigation.corners.Length <= CurCornerIndex)

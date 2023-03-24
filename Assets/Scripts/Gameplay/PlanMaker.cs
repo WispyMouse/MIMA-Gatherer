@@ -32,6 +32,8 @@ public class PlanMaker : MonoBehaviour
         {
             Destroy(StructurePlanActive.gameObject);
         }
+
+        StructurePlanActive = null;
     }
 
     private void Update()
@@ -52,6 +54,7 @@ public class PlanMaker : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             StructurePlanActive.StartThePlan();
+            StructurePlanActive = null;
             OnDismiss();
         }
     }

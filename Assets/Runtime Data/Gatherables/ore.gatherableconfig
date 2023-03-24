@@ -4,5 +4,6 @@
 	"ModelColor": "#A08000",
 	"ModelScale": 1.4,
 	"TimeToGatherResource": 1.2,
-	"AmountOfResourcesGathered": 10
+	"AmountOfResourcesGathered": 10,
+	"GatherForBuildingAmount": 10
 }

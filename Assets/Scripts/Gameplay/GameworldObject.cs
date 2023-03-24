@@ -106,6 +106,14 @@ public class GameworldObject : MonoBehaviour
 
         if (!CurrentTask.Processed)
         {
+            bool didPush = CurrentTask.ConsiderAndPushPrerequisiteTasks();
+
+            if (didPush)
+            {
+                ProcessTaskStack();
+                return;
+            }
+
             CurrentTask.ProcessAndCalculate();
             ProcessTaskStack();
             return;
