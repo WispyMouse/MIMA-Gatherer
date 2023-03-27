@@ -36,6 +36,7 @@ public class MapLoader : MonoBehaviour
         {
             Unit unit = Instantiate(UnitPrefab, su.Position, Quaternion.identity);
             unit.AssignUnitSkeleton(ConfigurationManagement.UnitSkeletons[su.FriendlyName.ToLower()]);
+            unit.AssignRandomIdentity();
             SpawnedObjects.Add(unit);
         }
     }

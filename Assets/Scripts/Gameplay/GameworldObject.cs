@@ -42,6 +42,7 @@ public class GameworldObject : MonoBehaviour
     {
         Unit newUnit = Instantiate(GameworldUnitPF);
         newUnit.AssignUnitSkeleton(toSpawn);
+        newUnit.AssignRandomIdentity();
 
         Vector2 randomOffset = Random.insideUnitCircle.normalized * DistanceToSpawnUnit.Value;
         newUnit.transform.position = transform.position + new Vector3(randomOffset.x, 0, randomOffset.y);

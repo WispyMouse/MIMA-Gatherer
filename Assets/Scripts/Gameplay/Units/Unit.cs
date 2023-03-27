@@ -30,7 +30,20 @@ public class Unit : GameworldObject
     private Structure ContributingToStructurePlan { get; set; }
 
     public override string FriendlyName => UnitSkeletonData.FriendlyName;
-    public override string DisplayName => UnitSkeletonData.UnitName;
+    public override string DisplayName
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(PersonalName))
+            {
+                return UnitSkeletonData.UnitName;
+            }
+
+            return PersonalName;
+        }
+    }
+
+    public string PersonalName { get; private set; }
 
     public void AssignUnitSkeleton(UnitSkeleton data)
     {
@@ -42,6 +55,11 @@ public class Unit : GameworldObject
         {
             this.ColorableModel.material.color = parsedColor;
         }
+    }
+
+    public void AssignRandomIdentity()
+    {
+        PersonalName = NamesManagement.GetRandomName();
     }
 
     public override void Interact()

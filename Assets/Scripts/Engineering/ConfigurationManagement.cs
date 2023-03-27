@@ -5,11 +5,11 @@ using UnityEngine;
 public class ConfigurationManagement : MonoBehaviour
 {
     public static ConfigurationContainer ActiveConfiguration { get; set; } = new ConfigurationContainer();
-    public string ConfigurationFilepath = "configurations.mimaconfig";
-    public string UnitFolderName = "Units";
-    public string StructureFolderName = "Structures";
-    public string GatherableFolderName = "Gatherables";
-    public string RootFolderName = "Runtime Data";
+    public static string ConfigurationFilepath = "configurations.mimaconfig";
+    public static string UnitFolderName = "Units";
+    public static string StructureFolderName = "Structures";
+    public static string GatherableFolderName = "Gatherables";
+    public static string RootFolderName = "Runtime Data";
 
     public string MapFilePath = "defaultmap.mimamap";
 
